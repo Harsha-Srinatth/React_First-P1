@@ -2,7 +2,7 @@ import React from 'react';
 import {useEffect, useState} from 'react'
 import {jwtDecode} from 'jwt-decode'
 import {SidebarLinks}  from '../constance/Links';
-import { NavLink,useLocation} from 'react-router-dom';
+import { NavLink,useLocation,} from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'
 
 
@@ -11,6 +11,7 @@ const Sidebar = ( ) => {
     const navigate = useNavigate();
     const {pathname} = location;
     const [firstname, setFirstname] = useState('');
+    const [username,setUsername] = useState('');
     const handleLogout = () => {
     
         if(typeof window !== "undefined" && typeof localStorage !== "undefined"){
@@ -26,12 +27,13 @@ const Sidebar = ( ) => {
    if(token){
      const decoded = jwtDecode(token);
      setFirstname(decoded.firstname);
+     setUsername(decoded.username);
    }
 },[]);
     return(
     
         <div className='flex flex-col '>
-            <div className='fixed hidden gap-11 bg-black text-white md:flex flex-col w-64 h-screen text-black p-4 bg-neutral-950'>
+            <div className='fixed hidden gap-5 bg-black md:flex flex-col w-64 h-screen p-4 bg-neutral-950'>
                <div className='flex flex-col '>
                     <a className="flex  items-center text-black md:mb-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-10 h-10 text-white p-2 bg-blue-500 rounded-full" viewBox="0 0 24 24">
@@ -42,29 +44,31 @@ const Sidebar = ( ) => {
                </div>
              
                     <div className="flex gap-4  items-center" > 
-                      <img src=" " alt="profile" className='rounded-full w-10 h-10 bg-red-500 '/>
+                        
+                             <img src="../imges/circle-user-solid.svg " alt="profile" className='rounded-full w-10 h-10 bg-red-500 cursor-pointer'/>
+                     
                        <div className='flex flex-col text-white'>
                             <p className='body-bold '>
                                 {firstname? firstname:'Guest'}
                             </p>
                             <p className='small-regular text-light-3 text-sm'>
-                            @{firstname? firstname:'Guest'}
+                            @{username? username:'Guest'}
                             </p>
                         </div>
                     </div>
                  
-                     <ul className='flex flex-col gap-3'>
+                     <ul className='flex flex-col gap-3 text-lg'>
                            {SidebarLinks.map((link)=>{
                            const isActive = pathname === link.route;
                                 return(
                                     <>
                                   
-                                    <li key={link.label} className={`${isActive ? "bg-blue-400 text-white" :"text-white" } hover:bg-blue-400 hover:text-white rounded-xl`}>
+                                    <li key={link.label} className={`${isActive ? "bg-blue-400 text-black font-semibold" :"text-white" } hover:bg-blue-400 hover:text-white rounded-xl`}>
                                     <NavLink to={link.route}
                                     className='flex gap-3 items-center p-4 group hover:from-blue-300 hover:to-cyan-400' >
                                         <img src={link.imageURL}
                                         alt={link.label} 
-                                        className='group-hover:invert-white w-8 h-8 '/>
+                                        className='group-hover:invert w-8 h-8 '/>
                                         {link.label}
                                     </NavLink>
                                     </li>

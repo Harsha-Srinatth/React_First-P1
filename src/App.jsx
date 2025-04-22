@@ -8,7 +8,9 @@ import Home from './context/Home'
 import Explore from './context/Explore'
 import Create from './context/Create'
 import SavedPosts from './context/SavedPosts'
-import YourPosts from './context/YourPosts'
+import YourPosts from './context/YourPosts';
+import Profile from './components/Profile';
+import UpdateUserProfile from './components/UpdateUserProfile'
 //import Likes from './context/Likes'
 //import { useEffect,useState } from 'react';
 const ProtectedRoute = ({ children }) => {
@@ -44,6 +46,8 @@ const  App = () => {
               <Route path="/create-post" element={<Create/>} /> 
               <Route path="/saved" element={<SavedPosts/>} />
               <Route path="/user/posts" element = {<YourPosts/>} />
+              <Route path="/user/profile" element={<Profile />} />
+              <Route path="/user/edit/profile"  element={UpdateUserProfile}/>
             
           </Route>
           

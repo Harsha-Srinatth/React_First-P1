@@ -73,53 +73,55 @@ const Comments = (props) => {
 
 
     return (
-        <>
-
-        <button onClick={()=>{
-            handleShowComments(postId),
-            setShowComments(prev => !prev)
-          }}>
-            {showComments ? "Hide Comments" : "View Comments" }
-         </button>
-
+      <div className='flex flex-row gap-2'>
+        <div className='flex flex-col text-sm'>
+            <button onClick={()=>{
+                handleShowComments(postId),
+                setShowComments(prev => !prev)
+              }}>
+                {showComments ? "Hide Comments" : "View Comments" }
+            </button>
+        </div>
+        <div  className='flex flex-col'>
           {showComments &&  (
               comments.map((comment , index) => 
-                <div key={index} className='mt-2 p-2'>
-                  <strong> {comment.user?.username || "User"}:</strong>
-                  <p className='flex items-center gap-2 text-lg justify-between '>
-                     {comment.text}
+                <div key={index} className='flex flex-col mt-2 p-2 '>
+                
+                      <strong> {comment.user?.username || "User"}:</strong>
+                      <p className='flex items-center gap-2 text-lg justify-between '>
+                        {comment.text}
 
-                     <button onClick={()=>{
-                    deleteComment(comment._id)
-                   }}>Delete</button>
-                  </p>
-               
+                        <button onClick={()=>{
+                        deleteComment(comment._id)
+                      }}>Delete</button>
+                      </p>
                  
-
                 </div>
           ))}
            
-                          
-              <div>
+          </div>                
+              <div className='flex flex-col'>
                 <form method='POST' onSubmit={handleComment}>
-                <input type="text" name="text" value={ text } placeholder='Add a Comment Here....'  onChange={(e) => setText(e.target.value)}/>
+                <input className='text-stone-700 p-1 rounded-lg mb-2' type="text" name="text" value={ text } placeholder='Add a Comment Here....'  onChange={(e) => setText(e.target.value)}/>
 
-                   <div>
-                        <button className="text-white text-xl font-semibold  bg-gradient-to-r from-purple-500 to-blue-500 border-0 py-1 px-4  hover:from-purple-600 hover: to-blue-600
+                   <div className='gap-2'>
+                        <button className="text-white text-sm font-semibold  bg-gradient-to-r from-purple-500 to-blue-500 border-0 py-1 px-4  hover:from-purple-600 hover: to-blue-600
                               focus:outline-none focus:ring focus:ring-purple-300
-                              active:bg-blue-700 rounded text-base mt-4 md:mt-0" type="submit" >
+                              active:bg-blue-700 rounded text-base md:mt-0" type="submit" >
                                   Submit
                          </button>
                    </div>
                  </form>
-                      <span>{count !== undefined ? count : 0}</span>
               </div>
 
-
+            <div className='flex flex-row justify-center items-center  '>
+                <span>{count !== undefined ? count : 0}</span>  
+            </div>
+             
         
       
          
-        </>
+        </div>
     )
 };
 export default Comments;

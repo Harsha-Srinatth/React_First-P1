@@ -40,9 +40,10 @@ const Create = () =>{
 };
     return(
     <div className='flex flex-col flex-1 p-2 gap-3 overflow-autoflex min-h-screen'>
-        <div className=' rounded-lg bg-stone-950 flex text-white w-full p-4 lg:items-center lg:justify-center'>
+        <div className=' rounded-lg bg-stone-950 flex text-white w-full p-4 lg:items-center lg:justify-center gap-3'>
              <img 
-                src=""
+                src="../imges/image-solid.svg"
+                className='invert'
                 width={36}
                 height={36}
                 alt="create" />
@@ -67,10 +68,11 @@ const Create = () =>{
              <div className='flex flex-col text-white gap-8 w-full max-w-5xl'>
                 <label className='mt-3 font-semibold lg:text-xl'>Add Photos and Videos</label>
                 <div className='flex flex-col items-center text-black gap-4'>
-                   <img src='' alt='photos' 
-                   width={36}
-                   height={36}
-                   className='' />
+                   <img src= '../imges/file-arrow-up-solid.svg' 
+                   alt='photos' 
+                   width={30}
+                   height={30}
+                   className='invert' />
                    <h1 className='text-white font-semibold'>
                      Upload photos and Videos Here...
                    </h1>
@@ -79,10 +81,11 @@ const Create = () =>{
                    </p>
                    <input 
                    type='file'
+                   placeholder='Upload Here..!'
                    onChange={UploadImage}
                    accept='image/*'
-                   className='text-white text-xl font-semibold  bg-gradient-to-r from-stone-500 to-gray-950 border-0 py-1 px-4  hover:from-stone-600 hover:to-black
-                      focus:outline-none rounded text-base mt-4 md:mt-0 cursor-pointer'
+                   className='text-white font-semibold  bg-gradient-to-r from-stone-500 to-gray-950 border-0
+                      focus:outline-none rounded p-1 mt-4 cursor-pointer '
                     />
                 </div> 
            </div>
@@ -107,7 +110,7 @@ const Create = () =>{
                   name='tags'
                   value = {tags}
                   onChange={(e) => setTags(e.target.value)}
-                  placeholder='Add Your Location' className=' w-full h-10 pl-3 flex items-center justify-center cursor-pointer'/>
+                  placeholder='Add Tags like #' className=' w-full h-10 pl-3 flex items-center justify-center cursor-pointer'/>
               </div>
             </div>
             <div className='text-white font-bold flex flex-row position-end justify-end items-center gap-5 h-20 p-5'>

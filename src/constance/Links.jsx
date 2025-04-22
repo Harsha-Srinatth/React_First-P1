@@ -1,48 +1,48 @@
  export const SidebarLinks = [
     {
-        imageURL : '',
+        imageURL : '../imges/house-solid.svg',
         label: 'Home',
         route: '/'
     },
     {
-        imageURL : '',
+        imageURL : '../imges/magnifying-glass-solid.svg',
         label: 'Explore',
         route: '/explore'
     }, {
-        imageURL : '',
+        imageURL : '../imges/square-plus-solid.svg',
         label: 'Create',
         route: '/create-post'
     }, {
-        imageURL : '',
+        imageURL : '../imges/bookmark-solid.svg',
         label: 'Saved Posts',
         route: '/saved'
     },{
-        imageURL : '',
+        imageURL : '../imges/image-solid.svg',
         label: 'Your Posts',
         route: '/user/posts'
+    },{
+        imageURL: '',
+        label: 'Profile',
+        route: '/user/profile'
     }
 ];
 
 export  const BottombarLinks = [
     {
-        imageURL : '',
+       imageURL : '../imges/house-solid.svg',
         label: 'Home',
        route: '/'
     }, {
-        imageURL : '',
+        imageURL : '../imges/magnifying-glass-solid.svg',
         label: 'Reels',
         route: '/explore'
     }, {
-        imageURL : '',
+        imageURL : '../imges/square-plus-solid.svg',
         label: 'Create',
        route: '/create-post'
-    }, {
-        imageURL : '',
-        label: 'Saved',
-       route: '/saved'
     },
     {
-        imageURL : '',
+        imageURL : '../imges/image-solid.svg',
         label: 'Your Posts',
         route: '/user/posts'
     }

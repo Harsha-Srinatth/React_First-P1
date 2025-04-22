@@ -1,6 +1,9 @@
 import React from 'react';
 import api from '../services/api';
 import { useState , useEffect } from 'react'
+import Likes from './Likes';
+import Comments from './Comments'
+  
 
 const YourPosts = ()=> {
 
@@ -54,17 +57,18 @@ const YourPosts = ()=> {
                       {/* Engagement Options */}
                       <div className="px-4 py-3">
                         <div className="flex justify-between text-white">
-                          <div className="flex items-center space-x-2">
-                            <button className="flex items-center space-x-1 hover:text-blue-500">
-                              Likes <span>{post.likes}</span>
-                            </button>
-                            <button className="flex items-center space-x-1 hover:text-blue-500">
-                              Comments <span>45</span>
-                            </button>
-                            {/* <button className="flex items-center space-x-1 hover:text-blue-500">
-                              Share <span>30</span>
-                            </button> */}
-                          </div>
+                        <div className="flex gap-4">
+                              <div className='flex flex-start'>
+                                  <Likes postId={post._id}
+                                    initialLikesCount = {post.likes.length}
+                                    initiallyLiked = {post.likedByUser}
+                                  />
+                              </div> 
+                              
+                              <div className="flex items-center flex-col mt-3">
+                                <Comments  postId= {post._id} Count={post.comments.length} comment={post.comments} userId ={post.userId} />
+                              </div>
+                            </div>
                         </div>
                       </div>
                     </div>
