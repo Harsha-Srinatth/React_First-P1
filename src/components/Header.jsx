@@ -1,6 +1,6 @@
 import React from 'react';
 import {useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate , Link} from 'react-router-dom'
 import {jwtDecode} from 'jwt-decode'
 import { useRef } from 'react';
 const Header =() =>{
@@ -36,13 +36,13 @@ const Header =() =>{
     <div className='' >     
         <header className="text-gray-600 bg-zinc-950 text-center">
           <div className="flex flex-wrap  items-center md:flex-row justify-between">
-            <a className="flex items-center md:mb-0 cursor-pointer">
+            <Link to='/user/profile' className="flex items-center md:mb-0 cursor-pointer">
               <img src='../imges/circle-user-solid.svg'
               width={36}
               height={36}
               className='invert' />
               <span className="ml-3 text-lg text-white font-bold">Welcome {username? username:'Guest'} !</span>
-            </a>
+            </Link>
             <div className='relative inline-block text-left'>
                 <button className="text-base md:mt-0 cursor-pointer mr-2 rounded-full" onClick={handleClick }>
                   <img 

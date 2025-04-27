@@ -12,9 +12,15 @@ import Comments from './Comments'
           api.get('/post',post)
           .then(responce => setPost(responce.data))
           .catch(error => console.error("Error when finding for users",error));
+          console.log(post);
         
       },[]);
-     
+      
+    // const handleProfile = async(userId) => {
+    //       const res = await api.get(`/all-Details/U/${userId}`)
+    //       console.log(res.data);
+    //  }
+    
        
     return(
     <>
@@ -24,13 +30,13 @@ import Comments from './Comments'
     
   { post.map(post => (
            <li key={post.id}>
-  <div className='grid grid-col-1 gap-1'>
-  <div className="max-w-xl min-w-sm mx-auto bg-black shadow-md rounded-lg overflow-hidden my-3">
-      {/* User Info */}
-      <div className="flex items-center px-4 py-3">
+    <div className='grid grid-col-1 gap-1'>
+    <div className="max-w-xl min-w-sm mx-auto bg-black shadow-md rounded-lg overflow-hidden my-3">
+        {/* User Info */}
+        <div className="flex items-center px-4 py-3">
         <img
           className="w-10 h-10 rounded-full"
-          src="" // Replace with actual profile image URL
+          src={ `http://localhost:5000${post.userId.image}` } // Replace with actual profile image URL
           alt="Profile"
         />
         <div className="ml-3">
@@ -42,7 +48,7 @@ import Comments from './Comments'
       {/* Post Image */}
       <img
         className="w-full h-96 object-cover rounded-lg"
-        src= { `http://localhost:5000${post.image}` } // Replace with actual post image URL
+        src= { `http://localhost:5000${post.image}` }
         alt="Post"
         width={96}
         height={77}

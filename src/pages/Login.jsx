@@ -25,7 +25,7 @@ const navigate = useNavigate();
    );
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('user', JSON.stringify(response.data.user));
-    navigate('/')
+    navigate('/');
     
     }catch(error){
      if(error.response){

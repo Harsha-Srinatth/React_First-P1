@@ -1,9 +1,10 @@
 import React from 'react';
-import {useEffect, useState} from 'react'
-import {jwtDecode} from 'jwt-decode'
+import {useEffect, useState} from 'react';
 import {SidebarLinks}  from '../constance/Links';
-import { NavLink,useLocation,} from 'react-router-dom';
-import { useNavigate } from 'react-router-dom'
+import { NavLink,useLocation,Link} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api'
+
 
 
 const Sidebar = ( ) => {
@@ -12,6 +13,7 @@ const Sidebar = ( ) => {
     const {pathname} = location;
     const [firstname, setFirstname] = useState('');
     const [username,setUsername] = useState('');
+    const [image , setImage] = useState('');
     const handleLogout = () => {
     
         if(typeof window !== "undefined" && typeof localStorage !== "undefined"){
@@ -22,14 +24,23 @@ const Sidebar = ( ) => {
             console.error("localStorage is not available.");
         }
     };
-  useEffect(() => {
-   const token = localStorage.getItem('token');
-   if(token){
-     const decoded = jwtDecode(token);
-     setFirstname(decoded.firstname);
-     setUsername(decoded.username);
-   }
-},[]);
+
+    useEffect(() => {
+        const Data = async() => {
+            const token = localStorage.getItem('token');
+            const res =  await api.get("/all-Details/C-U",{},
+             {
+                 headers:{
+                     Authorization: `Bearer ${token}`
+              }}
+             );
+            setUsername(res.data.username);
+            setFirstname(res.data.firstname);
+            setImage(res.data.image);         
+        }
+    Data();
+    },[]);
+
     return(
     
         <div className='flex flex-col '>
@@ -44,8 +55,9 @@ const Sidebar = ( ) => {
                </div>
              
                     <div className="flex gap-4  items-center" > 
-                        
-                             <img src="../imges/circle-user-solid.svg " alt="profile" className='rounded-full w-10 h-10 bg-red-500 cursor-pointer'/>
+                        <Link to="/upload-profile-img">
+                          <img src={ `http://localhost:5000${image}` } alt="profile" className='rounded-full w-10 h-10 bg-red-500 cursor-pointer'/>
+                        </Link>
                      
                        <div className='flex flex-col text-white'>
                             <p className='body-bold '>
