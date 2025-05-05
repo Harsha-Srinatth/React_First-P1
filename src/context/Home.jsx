@@ -15,12 +15,6 @@ import Comments from './Comments'
           console.log(post);
         
       },[]);
-      
-    // const handleProfile = async(userId) => {
-    //       const res = await api.get(`/all-Details/U/${userId}`)
-    //       console.log(res.data);
-    //  }
-    
        
     return(
     <>
@@ -36,7 +30,7 @@ import Comments from './Comments'
         <div className="flex items-center px-4 py-3">
         <img
           className="w-10 h-10 rounded-full"
-          src={ `http://localhost:5000${post.userId.image}` } // Replace with actual profile image URL
+          src={ `http://localhost:5000${post.userId.image}` }
           alt="Profile"
         />
         <div className="ml-3">

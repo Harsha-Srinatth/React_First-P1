@@ -1,6 +1,7 @@
+
 import axios from 'axios';
 const api = axios.create({
-    baseURL: 'http://localhost:5000/api-auth',
+    baseURL: 'https://backend-folder-vshe.onrender.com',
 });
 
 

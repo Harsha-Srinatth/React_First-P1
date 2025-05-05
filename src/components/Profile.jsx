@@ -105,11 +105,11 @@ const Profile = () => {
                         </div>
                         <div className="text-center">
                           <span className="block font-bold text-gray-800 text-base md:text-lg">{followers || 0}</span>
-                          <span className="text-xs md:text-sm text-gray-500">Followers</span>
+                          <Link to="/list-followers" className="text-xs md:text-sm text-gray-500 cursor-pointer">Followers</Link>
                         </div>
                         <div className="text-center">
                           <span className="block font-bold text-gray-800 text-base md:text-lg">{following || 0}</span>
-                          <span className="text-xs md:text-sm text-gray-500">Following</span>
+                          <Link to="/list-following" className="text-xs md:text-sm text-gray-500 cursor-pointer">Following</Link >
                         </div>
                       </div>
                       

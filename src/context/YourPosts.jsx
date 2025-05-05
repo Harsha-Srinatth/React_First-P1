@@ -33,7 +33,7 @@ const YourPosts = ()=> {
                       <div className="flex items-center px-4 py-3">
                         <img
                           className="w-10 h-10 rounded-full"
-                          src="" // Replace with actual profile image URL
+                          src={ `http://localhost:5000${post.image}`}
                           alt="Profile"
                         />
                         <div className="ml-3">

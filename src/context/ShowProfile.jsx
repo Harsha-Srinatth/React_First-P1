@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../services/api';
+import { Link } from 'react-router-dom'
 
 const ShowProfile = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [following, setFollowing] = useState('');
   const [followers, setFollowers] = useState('');
-  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false); 
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('posts');
 
@@ -133,15 +134,18 @@ const ShowProfile = () => {
           <div className="flex gap-6 md:gap-10 mt-4 border-b border-gray-100 pb-3">
             <div className="text-center">
               <span className="block font-bold text-gray-800 text-base md:text-lg">0</span>
-              <span className="text-xs md:text-sm text-gray-500">Posts</span>
+              <span className="text-xs md:text-sm text-gray-500 cursor-pointer">Posts</span>
             </div>
-            <div className="text-center">
+            <div className="text-center ">
               <span className="block font-bold text-gray-800 text-base md:text-lg">{followers || 0}</span>
-              <span className="text-xs md:text-sm text-gray-500">Followers</span>
+              <Link to="/list-followers" className="text-xs md:text-sm text-gray-500 cursor-pointer">
+                 Followers
+              </Link>
+              
             </div>
             <div className="text-center">
               <span className="block font-bold text-gray-800 text-base md:text-lg">{following || 0}</span>
-              <span className="text-xs md:text-sm text-gray-500">Following</span>
+              <Link to="/list-following" className="text-xs md:text-sm text-gray-500 cursor-pointer">Following</Link>
             </div>
           </div>
           

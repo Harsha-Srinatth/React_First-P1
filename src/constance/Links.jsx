@@ -12,16 +12,12 @@
         imageURL : '../imges/square-plus-solid.svg',
         label: 'Create',
         route: '/create-post'
-    }, {
-        imageURL : '../imges/bookmark-solid.svg',
-        label: 'Saved Posts',
-        route: '/saved'
     },{
         imageURL : '../imges/image-solid.svg',
         label: 'Your Posts',
         route: '/user/posts'
     },{
-        imageURL: '',
+        imageURL: '../imges/circle-user-solid.svg',
         label: 'Profile',
         route: '/user/profile'
     }
