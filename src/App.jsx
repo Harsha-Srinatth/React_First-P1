@@ -45,7 +45,6 @@ const  App = () => {
              <Route index element={<Home/>} />
               <Route path="/explore" element={<Explore />} />
               <Route path="/create-post" element={<Create/>} /> 
-              <Route path="/saved" element={<SavedPosts/>} />
               <Route path="/upload-profile-img" element={<AddProfile />} />
               <Route path="/user/posts" element = {<YourPosts/>} />
               <Route path="/user/profile" element={<Profile />} />
