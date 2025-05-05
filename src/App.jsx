@@ -6,8 +6,7 @@ import { BrowserRouter as Router,Routes,Route,Navigate} from 'react-router-dom';
 import  Dashboard from './pages/Dashboard';
 import Home from './context/Home'
 import Explore from './context/Explore'
-import Create from './context/Create'
-import SavedPosts from './context/SavedPosts'
+import Create from './context/Create';
 import YourPosts from './context/YourPosts';
 import Profile from './components/Profile';
 import UpdateUserProfile from './components/UpdateUserProfile';
