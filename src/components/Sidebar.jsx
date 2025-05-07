@@ -56,7 +56,7 @@ const Sidebar = ( ) => {
              
                     <div className="flex gap-4  items-center" > 
                         <Link to="/upload-profile-img">
-                          <img src={ `http://localhost:5000${image}` } alt="profile" className='rounded-full w-10 h-10 bg-red-500 cursor-pointer'/>
+                          <img src={ `https://backend-folder-hdib.onrender.com/${image}` } alt="profile" className='rounded-full w-10 h-10 bg-red-500 cursor-pointer'/>
                         </Link>
                      
                        <div className='flex flex-col text-white'>
