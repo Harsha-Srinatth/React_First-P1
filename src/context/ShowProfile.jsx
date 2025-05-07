@@ -87,7 +87,7 @@ const ShowProfile = () => {
       <div className="h-32 sm:h-36 md:h-48 bg-gradient-to-r from-blue-500 to-purple-600 relative w-full">
         {user.coverImage && (
           <img 
-            src={`https://backend-folder-hdib.onrender.com/${user.coverImage}`}
+            src={`https://backend-folder-hdib.onrender.com/uploads/${user.coverImage}`}
             alt="Cover"
             className="w-full h-full object-cover"
           />
@@ -103,7 +103,7 @@ const ShowProfile = () => {
             <div className="flex-shrink-0 -mt-8 md:-mt-12">
               <img 
                 className="rounded-full border-4 border-white shadow-md h-20 w-20 md:h-28 md:w-28 object-cover bg-gray-200"
-                src={`https://backend-folder-hdib.onrender.com/${user.image}`}
+                src={`https://backend-folder-hdib.onrender.com/uploads/${user.image}`}
                 alt={user.username}
                 onError={(e) => {
                   e.target.onerror = null;

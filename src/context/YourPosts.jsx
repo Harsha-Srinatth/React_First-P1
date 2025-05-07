@@ -33,7 +33,7 @@ const YourPosts = ()=> {
                       <div className="flex items-center px-4 py-3">
                         <img
                           className="w-10 h-10 rounded-full"
-                          src={ `https://backend-folder-hdib.onrender.com/${post.image}`}
+                          src={ `https://backend-folder-hdib.onrender.com/uploads/${post.image}`}
                           alt="Profile"
                         />
                         <div className="ml-3">
@@ -45,7 +45,7 @@ const YourPosts = ()=> {
                       {/* Post Image */}
                       <img
                         className="w-full h-96 object-cover rounded-lg"
-                        src= { `https://backend-folder-hdib.onrender.com/${post.image}` } // Replace with actual post image URL
+                        src= { `https://backend-folder-hdib.onrender.com/uploads/${post.image}` } // Replace with actual post image URL
                         alt="Post"
                         width={96}
                         height={77}

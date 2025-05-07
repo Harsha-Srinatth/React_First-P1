@@ -45,7 +45,7 @@ const Users = () => {
                 // const isFollowing = 
                 <li key={user._id} onClick={() => goToProfile(user._id)} >
                   <div className='flex flex-row gap-3'>
-                    <img src={ `https://backend-folder-hdib.onrender.com/${user.image}` } className='flex flex-row bg-yellow-600 rounded-full' alt='' width={56} height={56} />
+                    <img src={ `https://backend-folder-hdib.onrender.com/uploads/${user.image}` } className='flex flex-row bg-yellow-600 rounded-full' alt='' width={56} height={56} />
                     <div className='flex flex-col gap-2'>
                       <h1 className='text-lg text-2rem font-semibold '>{user.username}</h1>
                       <p className='text-sm text-3rem'>{user.firstname}</p>
