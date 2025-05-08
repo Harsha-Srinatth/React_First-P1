@@ -1,15 +1,20 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation , useNavigate } from 'react-router-dom';
 import { useState,useEffect } from 'react';
 import api from '../services/api'
 
 const ShowFollowing = () => {
     const location = useLocation();
-    const { userId } = location.state || {};
+    const navigate = useNavigate();
+    const { userId } = location.state?.userId;
 
     const [following , setFollowing ] = useState([]);
 
     useEffect(() => {
+        if(!userId){
+            console.warn("No user ID in location state " );
+            navigate("/login");
+        }
         const fetchData = async() => {
             const res = api.get(`/following-list/${userId}`);
             setFollowing(res.data.following);
