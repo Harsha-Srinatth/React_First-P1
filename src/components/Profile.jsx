@@ -18,7 +18,7 @@ const Profile = () => {
             const fetchDetails = async() => {
                 try{
                    const token = localStorage.getItem('token');
-                    if(userId){
+                  
                         const res = await api.get('/getDetails',
                           {
                             headers:{
@@ -29,15 +29,13 @@ const Profile = () => {
                          console.log(res.data.details);
                          setFollowers(res.data.FollowersCount);
                          setFollowing(res.data.FollowingCount);
-                    }else{
-                        console.log("no userId available, skkiping api call")
-                    }
+                   
                 }catch(err){
                     console.log(err);
                 }
             }
             fetchDetails();
-         },[userId]);
+         },[]);
     
 
            
@@ -97,7 +95,7 @@ const Profile = () => {
                         </div>
                         <div className="text-center">
                           <span className="block font-bold text-gray-800 text-base md:text-lg">{followers || 0}</span>
-                          <Link to={`/list-followers/${details._id}`}  className="text-xs md:text-sm text-gray-500 cursor-pointer">Followers</Link>
+                          <Link to={`/list-followers/${details._id}`} className="text-xs md:text-sm text-gray-500 cursor-pointer">Followers</Link>
                         </div>
                         <div className="text-center">
                           <span className="block font-bold text-gray-800 text-base md:text-lg">{following || 0}</span>
