@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useState,useEffect } from 'react';
+import api from '../services/api'
 
 const ShowFollowing = () => {
     const location = useLocation();
