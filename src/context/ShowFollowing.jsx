@@ -19,7 +19,7 @@ const ShowFollowing = () => {
         const fetchData = async() => {
             const res = api.get(`/following-list/${userId}`);
             setFollowing(res.data.following);
-            console.log(res.data);
+            console.log(res.data.following);
         };
         fetchData();
     },[userId])
