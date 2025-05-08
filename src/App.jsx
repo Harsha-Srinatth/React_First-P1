@@ -53,7 +53,7 @@ const  App = () => {
               <Route path="/user/edit/profile"  element={ <UpdateUserProfile />}/>
               <Route path="/user/:userId" element={<ShowProfile />}/>  
               <Route path="/list-followers" element={ <ShowFollowers />} /> 
-              <Route path="/list-following" element= { <ShowFollowing />} />     
+              <Route path="/list-following/:userId" element= { <ShowFollowing />} />     
           </Route>
           
                 

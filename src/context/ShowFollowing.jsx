@@ -1,12 +1,12 @@
 import React from 'react';
-import { useLocation , useNavigate } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 import { useState,useEffect } from 'react';
 import api from '../services/api'
 
 const ShowFollowing = () => {
-    const location = useLocation();
+
     const navigate = useNavigate();
-    const { userId } = location.state?.userId;
+    const { userId } = useParams();
 
     const [following , setFollowing ] = useState([]);
 

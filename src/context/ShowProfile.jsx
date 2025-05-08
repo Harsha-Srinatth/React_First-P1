@@ -145,7 +145,7 @@ const ShowProfile = () => {
             </div>
             <div className="text-center">
               <span className="block font-bold text-gray-800 text-base md:text-lg">{following || 0}</span>
-              <Link to="/list-following" className="text-xs md:text-sm text-gray-500 cursor-pointer">Following</Link>
+              <Link to={`/list-following/${user._id}`} className="text-xs md:text-sm text-gray-500 cursor-pointer">Following</Link>
             </div>
           </div>
           
