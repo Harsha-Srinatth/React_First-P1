@@ -3,36 +3,28 @@ import React from 'react';
 
 import { Link} from 'react-router-dom';
 import { useState, useEffect} from 'react';
-import { jwtDecode } from 'jwt-decode';
 import api from '../services/api';
  
 
 
 const Profile = () => {
-     const [userId,setUserId] = useState('');
+
      const [details, setDetails] = useState([]);
      const [followers ,setFollowers] = useState('');
      const [following ,setFollowing] = useState('');
-      const [loading, setLoading] = useState(true);
      const [activeTab, setActiveTab] = useState('posts');
-
-      useEffect(() => {
-            const token = localStorage.getItem('token');
-            console.log(token);
-            if(token){
-              const decoded = jwtDecode(token);
-              setUserId(decoded.userId);
-              console.log(decoded.userId);
-            }
-         },[]);
 
          useEffect(() => {
             const fetchDetails = async() => {
                 try{
+                   const token = localStorage.getItem('token');
                     if(userId){
-                        const res = await api.get('/getDetails',{
-                            params:{ userId }
-                        });
+                        const res = await api.get('/getDetails',
+                          {
+                            headers:{
+                                Authorization: `Bearer ${token}`
+                         }}
+                        );
                          setDetails(res.data.details);
                          console.log(res.data.details);
                          setFollowers(res.data.FollowersCount);
@@ -105,11 +97,11 @@ const Profile = () => {
                         </div>
                         <div className="text-center">
                           <span className="block font-bold text-gray-800 text-base md:text-lg">{followers || 0}</span>
-                          <Link to="/list-followers" state={ { userId : details._id }} className="text-xs md:text-sm text-gray-500 cursor-pointer">Followers</Link>
+                          <Link to={`/list-followers/${details._id}`}  className="text-xs md:text-sm text-gray-500 cursor-pointer">Followers</Link>
                         </div>
                         <div className="text-center">
                           <span className="block font-bold text-gray-800 text-base md:text-lg">{following || 0}</span>
-                          <Link to="/list-following" className="text-xs md:text-sm text-gray-500 cursor-pointer">Following</Link >
+                          <Link to={`/list-following/${details._id}`} className="text-xs md:text-sm text-gray-500 cursor-pointer">Following</Link >
                         </div>
                       </div>
                       
