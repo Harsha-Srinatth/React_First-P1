@@ -7,6 +7,7 @@ const ShowFollowing = () => {
 
     const navigate = useNavigate();
     const { userId } = useParams();
+    console.log(userId,"user Id from params");
 
     const [following , setFollowing ] = useState([]);
 
