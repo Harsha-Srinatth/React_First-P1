@@ -20,7 +20,22 @@ const YourPosts = ()=> {
                       .catch(error => console.error("Error when finding for users",error));
                      
                },[]);
-
+    
+        const deletePost = async(postId) => {
+            if(!postId){
+               console.error("postID is Undefined");
+               return;
+            }
+             try{
+              const token = localStorage.getItem('token');
+              const res = await api.delete(`/posts/${postId}`, {
+                headers:{
+                    Authorization: `Bearer ${token}`
+             }});
+             }catch(error){
+              console.error(error);
+             }
+          };
     return (
      <>
          { userposts.length > 0 ? (
@@ -39,6 +54,12 @@ const YourPosts = ()=> {
                         <div className="ml-3">
                           <p className="text-white font-semibold">{post.caption}</p>
                           <p className="text-gray-500 text-sm">2 hours ago</p>
+                        </div>
+                        <div className='flex flex-row'>
+                          <img src='/imges/ellipsis-vertical-solid.svg' alt='deletePost' 
+                          width={16}
+                          height={16}
+                          onClick={deletePost(post._id)} />
                         </div>
                       </div>
 

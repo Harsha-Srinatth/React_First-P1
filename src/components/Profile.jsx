@@ -105,7 +105,7 @@ const Profile = () => {
                         </div>
                         <div className="text-center">
                           <span className="block font-bold text-gray-800 text-base md:text-lg">{followers || 0}</span>
-                          <Link to="/list-followers" className="text-xs md:text-sm text-gray-500 cursor-pointer">Followers</Link>
+                          <Link to="/list-followers" state={ { userId : details._id }} className="text-xs md:text-sm text-gray-500 cursor-pointer">Followers</Link>
                         </div>
                         <div className="text-center">
                           <span className="block font-bold text-gray-800 text-base md:text-lg">{following || 0}</span>

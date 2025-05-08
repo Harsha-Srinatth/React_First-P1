@@ -12,8 +12,8 @@ import Profile from './components/Profile';
 import UpdateUserProfile from './components/UpdateUserProfile';
 import ShowProfile from './context/ShowProfile';
 import AddProfile from './components/AddProfile';
-// import ShowFollowers from './context/ShowFollowers';
-// import ShowFollowing from './context/ShowFollowing';
+import ShowFollowers from './context/ShowFollowers';
+import ShowFollowing from './context/ShowFollowing';
 //import Likes from './context/Likes'
 //import { useEffect,useState } from 'react';
 const ProtectedRoute = ({ children }) => {
@@ -52,8 +52,8 @@ const  App = () => {
               <Route path="/user/profile" element={<Profile />} />
               <Route path="/user/edit/profile"  element={ <UpdateUserProfile />}/>
               <Route path="/user/:userId" element={<ShowProfile />}/>  
-              {/* <Route path="/list-followers" element={ <ShowFollowers />} /> 
-              <Route path="/list-following" element= { <ShowFollowing />} />      */}
+              <Route path="/list-followers" element={ <ShowFollowers />} /> 
+              <Route path="/list-following" element= { <ShowFollowing />} />     
           </Route>
           
                 
