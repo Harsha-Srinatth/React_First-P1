@@ -59,7 +59,7 @@ const YourPosts = ()=> {
                           <img src='/imges/ellipsis-vertical-solid.svg' alt='deletePost' 
                           width={16}
                           height={16}
-                          onClick={deletePost(post._id)} />
+                          onClick={() => deletePost(post._id)} />
                         </div>
                       </div>
 
