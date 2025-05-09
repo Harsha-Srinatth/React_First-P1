@@ -19,16 +19,25 @@ const ShowFollowing = () => {
         }
         const fetchData = async() => {
             try{
-                const res = api.get(`/following-list/${userId}`);
+                const res = await api.get(`/following-list/${userId}`);
                 console.log("Api responce object :", res);
                 console.log("Full Api responce:" , res.data);
-                if(res.data && Array.isArray((await res).data.following)){
-                    setFollowing(res.data.following);
+                if(res && res.data){
+                     if(Array.isArray(res.data)){
+                    setFollowing(res.data);
+                        console.log("setting following data from aray responce ",res.data)
+                    }else if( res.data.following && Array.isArray(res.data.following)){
+                        setFollowing(res.data.following);
+                        console.log("setting following data from res.data.following",res.data.following)
+                    }else{
+                        console.warn("Following data is not an Array:",res.data);
+                        setFollowing([]);
+                    }
                 }else{
-                    console.warn("Following data is not an Array:",res.data);
+                    console.log("No data in rwsponce");
                     setFollowing([]);
                 }
-              
+                 
             }catch(error){
                 console.error(error);
                 setFollowing([]);
@@ -42,10 +51,10 @@ const ShowFollowing = () => {
         <div>
             <div className='text-white'>
                <h1 className='text-white font-semibold'>
-                     Your Following List..!
+                    Following List..!
                 </h1> 
             
-            {following.map((user)=> {
+            { following && following.length > 0 ? (following.map((user)=> {
                 <li key={user._id} >
                 <div className='flex flex-row gap-3 text-white'>
                   <img src={ `https://backend-folder-hdib.onrender.com/uploads/${user.image}` } className='flex flex-row bg-yellow-600 rounded-full' alt='' width={56} height={56} />
@@ -55,7 +64,11 @@ const ShowFollowing = () => {
                   </div>
                 </div>
               </li>
-            })}
+            })) : (
+                <div>
+                    <p>No following user found</p>
+                </div>
+            )}
             </div>
         </div>
     )
