@@ -10,9 +10,8 @@ import Comments from './Comments'
       useEffect(() => {
         const fetchData = async() => {
             const res = await api.get('/post');
-            const data = await res.json();
-            console.log("fetches posts",data);
-            setPost(data);      
+            console.log("fetches posts",res.data);
+            setPost(res.data);      
         };
         fetchData();
       },[]);
