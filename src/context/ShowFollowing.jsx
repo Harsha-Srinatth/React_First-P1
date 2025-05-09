@@ -61,7 +61,7 @@ const ShowFollowing = () => {
     return(
     <div className='text-white w-full' action="/explore">
 
-      <h1 className='flex flex-center font-bold text-3xl md:text-xl'>Users List</h1>
+      <h1 className='flex flex-center font-bold text-3xl md:text-xl'>Following List</h1>
       <div className='flex flex-col'>
         {/* <input type='text' value={search} className='w-full p-2 mt-1' placeholder='Search For Others You Want To Know..?' onChange={(e) => setSearch(e.target.value)} /> */}
         {following && following.length > 0 ? (
