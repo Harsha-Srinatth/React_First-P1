@@ -15,14 +15,27 @@ const ShowFollowing = () => {
         if(!userId){
             console.warn("No user ID in location state " );
             navigate("/login");
+            return;
         }
         const fetchData = async() => {
-            const res = api.get(`/following-list/${userId}`);
-            setFollowing(res.data.following);
-            console.log(res.data.following);
+            try{
+                const res = api.get(`/following-list/${userId}`);
+                console.log("Full Api responce:" , res.data);
+                if(res.data && Array.isArray((await res).data.following)){
+                    setFollowing(res.data.following);
+                }else{
+                    console.warn("Following data is not an Array:",res.data);
+                    setFollowing([]);
+                }
+              
+            }catch(error){
+                console.error(error);
+                setFollowing([]);
+            }
+           
         };
         fetchData();
-    },[userId])
+    },[userId, navigate]);
 
     return(
         <div>
