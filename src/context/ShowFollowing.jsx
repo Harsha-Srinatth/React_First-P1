@@ -20,6 +20,7 @@ const ShowFollowing = () => {
         const fetchData = async() => {
             try{
                 const res = api.get(`/following-list/${userId}`);
+                console.log("Api responce object :", res);
                 console.log("Full Api responce:" , res.data);
                 if(res.data && Array.isArray((await res).data.following)){
                     setFollowing(res.data.following);
