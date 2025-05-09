@@ -56,7 +56,8 @@ const YourPosts = ()=> {
                           <p className="text-gray-500 text-sm">2 hours ago</p>
                         </div>
                         <div className='flex flex-row'>
-                          <img src='/imges/ellipsis-vertical-solid.svg' alt='deletePost' 
+                          <img src='/imges/ellipsis-vertical-solid.svg' alt='deletePost'
+                          className='invert' 
                           width={16}
                           height={16}
                           onClick={() => deletePost(post._id)} />
