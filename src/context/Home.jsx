@@ -77,8 +77,8 @@ import Comments from './Comments'
          </li>
         ))
     ) : (
-      <div>
-        <p>No posts available </p>
+      <div className='text-white text-center'>
+        <p className='text-xl'>No posts available </p>
       </div>
     )}
   
