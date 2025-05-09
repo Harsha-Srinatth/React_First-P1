@@ -8,13 +8,15 @@ import api from '../services/api';
 
 
 const Profile = () => {
-
+    
+     const [loading, setLoading] = useState('');
      const [details, setDetails] = useState([]);
      const [followers ,setFollowers] = useState('');
      const [following ,setFollowing] = useState('');
      const [activeTab, setActiveTab] = useState('posts');
 
          useEffect(() => {
+          setLoading(true);
             const fetchDetails = async() => {
                 try{
                    const token = localStorage.getItem('token');
@@ -32,15 +34,23 @@ const Profile = () => {
                    
                 }catch(err){
                     console.log(err);
+                }finally{
+                  setLoading(false);
                 }
             }
             fetchDetails();
          },[]);
     
 
+           if(loading) {
+            return (
+              <div className="flex items-center justify-center h-full w-full p-4">
+                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+              </div>
+            );
+          }
            
-           
-              return (
+          return (
                 // Content container - optimized for sidebar and outlet pattern
                 <div className="w-full bg-gray-50 overflow-y-auto pb-16 md:pb-0">
                   {/* Cover photo - responsive height */}
