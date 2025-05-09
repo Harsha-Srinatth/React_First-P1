@@ -30,7 +30,7 @@ import Comments from './Comments'
         <div className="flex items-center px-4 py-3">
         <img
           className="w-10 h-10 rounded-full"
-          src={ `https://backend-folder-hdib.onrender.com/uploads/${post.userId.image}` }
+          src={ `https://backend-folder-hdib.onrender.com/image/${post.userId.image}` }
           alt="Profile"
         />
         <div className="ml-3">
@@ -42,7 +42,7 @@ import Comments from './Comments'
       {/* Post Image */}
       <img
         className="w-full h-96 object-cover rounded-lg"
-        src= { `https://backend-folder-hdib.onrender.com/uploads/${post.image}` }
+        src= { `https://backend-folder-hdib.onrender.com/post/${post._id}` }
         alt="Post"
         width={96}
         height={77}
