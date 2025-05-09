@@ -11,7 +11,8 @@ import Comments from './Comments'
         const fetchData = async() => {
             const res = await api.get('/post');
             console.log("raw responce",res);
-            setPost(res.data);      
+            setPost(res.data); 
+            console.log("user image", post.userId.image)     
         };
         fetchData();
       },[]);
@@ -30,7 +31,7 @@ import Comments from './Comments'
         <div className="flex items-center px-4 py-3">
      {post.userId?.imageUrl && ( <img
           className="w-10 h-10 rounded-full"
-          src={ post.userId.imageUrl }
+          src={ post.userId.image }
           alt="Profile"
         />
       )}
