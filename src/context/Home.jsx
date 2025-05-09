@@ -31,7 +31,7 @@ import Comments from './Comments'
         <div className="flex items-center px-4 py-3">
      {post.userId?.imageUrl && ( <img
           className="w-10 h-10 rounded-full"
-          src={ post.userId.image }
+          src={ post.user.imageUrl }
           alt="Profile"
         />
       )}
