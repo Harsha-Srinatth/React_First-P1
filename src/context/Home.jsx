@@ -11,9 +11,7 @@ import Comments from './Comments'
         const fetchData = async() => {
             const res = await api.get('/post');
             console.log("raw responce",res);
-            const data = await res.json();
-            console.log("fetched posts:",data);
-            setPost(data);      
+            setPost(res.data);      
         };
         fetchData();
       },[]);
