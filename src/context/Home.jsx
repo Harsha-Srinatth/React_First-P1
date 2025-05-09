@@ -6,16 +6,31 @@ import Comments from './Comments'
   
   const Posts = ()=>{
         const [post, setPost] = useState([]);
+        const [loading,setLoading] = useState('');
       
       useEffect(() => {
-        const fetchData = async() => {
+        setLoading(true);
+        try{
+            const fetchData = async() => {
             const res = await api.get('/post');
             console.log("raw responce",res);
             setPost(res.data);      
-        };
-        fetchData();
+               };
+            fetchData();
+        }catch(error){
+          console.log(error);
+        }finally{
+          setLoading(false);
+        }
       },[]);
-       
+
+       if(loading) {
+          return (
+            <div className="flex items-center justify-center h-full w-full p-4">
+              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+            </div>
+          );
+        }
     return(
     <>
    

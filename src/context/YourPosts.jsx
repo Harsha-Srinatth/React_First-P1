@@ -7,10 +7,11 @@ import Comments from './Comments'
 
 const YourPosts = ()=> {
 
-    const [userposts, setUserposts ] = useState([])
+    const [userposts, setUserposts ] = useState([]);
+    const [loading,setLoading] = useState('');
     const token = localStorage.getItem('token')
               useEffect(() => {
-                    
+                      setLoading(true);
                       api.get('/user/posts', userposts,{
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -18,10 +19,11 @@ const YourPosts = ()=> {
                       })
                       .then(responce => setUserposts(responce.data))
                       .catch(error => console.error("Error when finding for users",error));
-                     
+                    setLoading(false); 
                },[]);
     
         const deletePost = async(postId) => {
+          setLoading(true);
             if(!postId){
                console.error("postID is Undefined");
                return;
@@ -34,8 +36,18 @@ const YourPosts = ()=> {
              }});
              }catch(error){
               console.error(error);
+             }finally{
+              setLoading(false);
              }
           };
+
+          if(loading) {
+          return (
+              <div className="flex items-center justify-center h-full w-full p-4">
+                <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+              </div>
+            );
+          }
     return (
      <>
          { userposts.length > 0 ? (
@@ -45,7 +57,7 @@ const YourPosts = ()=> {
                   <div className='grid grid-col-1 gap-1'>
                   <div className="max-w-xl min-w-sm mx-auto bg-black shadow-md rounded-lg overflow-hidden my-3">
                       {/* User Info */}
-                      <div className="flex items-center px-4 py-3">
+                      <div className="flex items-center justify-between px-4 py-3">
                         <img
                           className="w-10 h-10 rounded-full"
                           src={ `https://backend-folder-hdib.onrender.com/uploads/${post.image}`}
@@ -55,7 +67,7 @@ const YourPosts = ()=> {
                           <p className="text-white font-semibold">{post.caption}</p>
                           <p className="text-gray-500 text-sm">2 hours ago</p>
                         </div>
-                        <div className='flex flex-row'>
+                        <div className=''>
                           <img src='/imges/ellipsis-vertical-solid.svg' alt='deletePost'
                           className='invert' 
                           width={16}
