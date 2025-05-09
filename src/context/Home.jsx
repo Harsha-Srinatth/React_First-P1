@@ -12,7 +12,7 @@ import Comments from './Comments'
             const res = await api.get('/post');
             console.log("raw responce",res);
             setPost(res.data); 
-            console.log("user image", post.userId.image)     
+            console.log("user image", post.user.imageUrl)     
         };
         fetchData();
       },[]);
@@ -29,7 +29,7 @@ import Comments from './Comments'
     <div className="max-w-xl min-w-sm mx-auto bg-black shadow-md rounded-lg overflow-hidden my-3">
         {/* User Info */}
         <div className="flex items-center px-4 py-3">
-     {post.userId?.imageUrl && ( <img
+     {post.user.imageUrl && ( <img
           className="w-10 h-10 rounded-full"
           src={ post.user.imageUrl }
           alt="Profile"
