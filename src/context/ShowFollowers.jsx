@@ -10,8 +10,10 @@ const ShowFollowers = () => {
     console.log(userId,"user Id from params");
 
     const [followers , setFollowers ] = useState([]);
+    const [loading,setLoading] = useState('');
 
     useEffect(() => {
+        setLoading(true);
         if(!userId){
             console.warn("No user ID in location state " );
             navigate("/login");
@@ -40,12 +42,22 @@ const ShowFollowers = () => {
             }catch(error){
                 console.error(error);
                 setFollowers([]);
+            }finally{
+              setLoading(false);
             }
            
         };
         fetchData();
         console.log(followers);
     },[userId, navigate]);
+
+    if(loading) {
+    return (
+      <div className="flex items-center justify-center h-full w-full p-4">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
 
     return(
     <div className='text-white w-full'>
