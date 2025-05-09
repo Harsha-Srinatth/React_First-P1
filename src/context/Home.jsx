@@ -8,12 +8,13 @@ import Comments from './Comments'
         const [post, setPost] = useState([]);
       
       useEffect(() => {
-        
-          api.get('/post',post)
-          .then(responce => setPost(responce.data))
-          .catch(error => console.error("Error when finding for users",error));
-          console.log(post);
-        
+        const fetchData = async() => {
+            const res = await api.get('/post');
+            const data = await res.json();
+            console.log("fetches posts",data);
+            setPost(data);      
+        };
+        fetchData();
       },[]);
        
     return(
@@ -21,16 +22,16 @@ import Comments from './Comments'
    
 <div className='flex flex-col flex-1 p-2'>
   
-    
-  { post.map(post => (
-           <li key={post.id}>
+    {post.length>0 ? (
+      post.map((post) => (
+          <li key={post._id}>
     <div className='grid grid-col-1 gap-1'>
     <div className="max-w-xl min-w-sm mx-auto bg-black shadow-md rounded-lg overflow-hidden my-3">
         {/* User Info */}
         <div className="flex items-center px-4 py-3">
         <img
           className="w-10 h-10 rounded-full"
-          src={ `https://backend-folder-hdib.onrender.com/image/${post.userId.image}` }
+       // src={ `https://backend-folder-hdib.onrender.com/image/${post.userI}` }
           alt="Profile"
         />
         <div className="ml-3">
@@ -40,17 +41,18 @@ import Comments from './Comments'
       </div>
 
       {/* Post Image */}
-      <img
+      { post.imageUrl && <img
         className="w-full h-96 object-cover rounded-lg"
         src= { post.imageUrl }
         alt="Post"
         width={96}
         height={77}
-      />
+      /> }
         <div className='text-white'>
           <p>{post.tags}</p>
           <p>{post.location}</p>
         </div>
+      
       {/* Engagement Options */}
       <div className="px-4 py-3">
         <div className="flex justify-between text-white">
@@ -72,7 +74,13 @@ import Comments from './Comments'
 </div>
 
          </li>
-        ))}
+        ))
+    ) : (
+      <div>
+        <p>No posts available </p>
+      </div>
+    )}
+  
 </div>
 
    
