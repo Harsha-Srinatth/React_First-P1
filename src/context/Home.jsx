@@ -42,7 +42,7 @@ import Comments from './Comments'
       {/* Post Image */}
       <img
         className="w-full h-96 object-cover rounded-lg"
-        src= { `https://backend-folder-hdib.onrender.com/post/${post._id}` }
+        src= { post.imageUrl }
         alt="Post"
         width={96}
         height={77}
