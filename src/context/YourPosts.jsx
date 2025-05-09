@@ -8,18 +8,23 @@ import Comments from './Comments'
 const YourPosts = ()=> {
 
     const [userposts, setUserposts ] = useState([]);
-    const [loading,setLoading] = useState('');
+    const [loading,setLoading] = useState(true);
     const token = localStorage.getItem('token')
               useEffect(() => {
-                      setLoading(true);
-                      api.get('/user/posts', userposts,{
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                      })
-                      .then(responce => setUserposts(responce.data))
-                      .catch(error => console.error("Error when finding for users",error));
-                    setLoading(false); 
+                      try{
+                          api.get('/user/posts', userposts,{
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            },
+                          })
+                          .then(responce => setUserposts(responce.data))
+                          .catch(error => console.error("Error when finding for users",error));
+                      }catch(error){
+                        console.error(error)
+                      }finally{
+                        setLoading(false);
+                      }
+                
                },[]);
     
         const deletePost = async(postId) => {

@@ -6,10 +6,9 @@ import Comments from './Comments'
   
   const Posts = ()=>{
         const [post, setPost] = useState([]);
-        const [loading,setLoading] = useState('');
+        const [loading,setLoading] = useState(true);
       
       useEffect(() => {
-        setLoading(true);
         try{
             const fetchData = async() => {
             const res = await api.get('/post');
@@ -23,7 +22,7 @@ import Comments from './Comments'
           setLoading(false);
         }
       },[]);
-
+      
        if(loading) {
           return (
             <div className="flex items-center justify-center h-full w-full p-4">
