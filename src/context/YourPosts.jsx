@@ -11,20 +11,22 @@ const YourPosts = ()=> {
     const [loading,setLoading] = useState(true);
     const token = localStorage.getItem('token')
               useEffect(() => {
-                      try{
-                          api.get('/user/posts', userposts,{
+                const fetchUserPosts = async()=> {
+                   try{
+                       const res = await api.get('/user/posts',{
                             headers: {
                                 Authorization: `Bearer ${token}`
                             },
                           })
-                          .then(responce => setUserposts(responce.data))
-                          .catch(error => console.error("Error when finding for users",error));
-                          console.log(userposts);
+                        setUserposts(res.data)
+                        console.log("Fetched user posts",res.data);
                       }catch(error){
                         console.error(error)
                       }finally{
                         setLoading(false);
                       }
+                }
+                fetchUserPosts();     
                 
                },[]);
     
@@ -59,16 +61,18 @@ const YourPosts = ()=> {
          { userposts.length > 0 ? (
           <div className='flex flex-col flex-1 p-2'>    
               { userposts.map(post => (
-                <li key={post.id}>
+                <li key={post._id}>
                   <div className='grid grid-col-1 gap-1'>
                   <div className="max-w-xl min-w-sm mx-auto bg-black shadow-md rounded-lg overflow-hidden my-3">
                       {/* User Info */}
                       <div className="flex items-center justify-between px-4 py-3">
-                        <img
-                          className="w-10 h-10 rounded-full"
-                          src={ post.user.imageUrl }
-                          alt="Profile"
-                        />
+                        {post.user.imageUrl && ( <img
+                            className="w-10 h-10 rounded-full"
+                            src={ post.user.imageUrl }
+                            alt="Profile"
+                          />
+                         )}
+                         <p>{post.user.username}</p>
                         <div className="ml-3">
                           <p className="text-white font-semibold">{post.caption}</p>
                           <p className="text-gray-500 text-sm">2 hours ago</p>

@@ -42,12 +42,12 @@ import Comments from './Comments'
     <div className="max-w-xl min-w-sm mx-auto bg-black shadow-md rounded-lg overflow-hidden my-3">
         {/* User Info */}
         <div className="flex items-center px-4 py-3">
-     {post.user.imageUrl && ( <img
-          className="w-10 h-10 rounded-full"
-          src={ post.user.imageUrl }
-          alt="Profile"
-        />
-      )}
+          {post.user.imageUrl && ( <img
+                className="w-10 h-10 rounded-full"
+                src={ post.user.imageUrl }
+                alt="Profile"
+              />
+            )}
         <div className="ml-3">
           <p className="text-white font-semibold">{post.caption}</p>
           <p className="text-gray-500 text-sm">2 hours ago</p>
