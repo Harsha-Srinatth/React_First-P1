@@ -9,7 +9,8 @@ const YourPosts = ()=> {
 
     const [userposts, setUserposts ] = useState([]);
     const [loading,setLoading] = useState(true);
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
+    
               useEffect(() => {
                 const fetchUserPosts = async()=> {
                    try{
