@@ -17,8 +17,9 @@ const YourPosts = ()=> {
                                 Authorization: `Bearer ${token}`
                             },
                           })
-                          .then(responce => setUserposts(responce.data))
+                          .then(responce => setUserposts(responce.data));
                           .catch(error => console.error("Error when finding for users",error));
+                          console.log(userposts);
                       }catch(error){
                         console.error(error)
                       }finally{
@@ -84,7 +85,7 @@ const YourPosts = ()=> {
                       {/* Post Image */}
                       <img
                         className="w-full h-96 object-cover rounded-lg"
-                        src= { `https://backend-folder-hdib.onrender.com/uploads/${post.image}` } // Replace with actual post image URL
+                        src= { post.imageUrl } // Replace with actual post image URL
                         alt="Post"
                         width={96}
                         height={77}
