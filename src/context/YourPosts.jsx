@@ -17,7 +17,7 @@ const YourPosts = ()=> {
                                 Authorization: `Bearer ${token}`
                             },
                           })
-                          .then(responce => setUserposts(responce.data));
+                          .then(responce => setUserposts(responce.data))
                           .catch(error => console.error("Error when finding for users",error));
                           console.log(userposts);
                       }catch(error){
