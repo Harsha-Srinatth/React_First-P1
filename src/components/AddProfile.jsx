@@ -57,6 +57,7 @@ const AddProfile = () => {
                 <form onSubmit={handleProfileSubmit} action="/upload-profile-img" method="POST">
                     <input 
                     type='file'
+                    name="profilePhoto"
                     placeholder='Upload Here..!'
                     onChange={UploadProfile}
                     accept='profilePhoto/*'
