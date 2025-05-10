@@ -35,13 +35,13 @@ const AddProfile = () => {
                     }},
                     );
     
-                    if (data.ok) {
-                    console.log('Upload successful:', result);
-                    // Update UI or notify user
-                    } else {
-                    console.error('Upload failed:', result);
-                    // Show error to user
-                    }
+                    // if (data.ok) {
+                    // console.log('Upload successful:', result);
+                    // // Update UI or notify user
+                    // } else {
+                    // console.error('Upload failed:', result);
+                    // // Show error to user
+                    // }
                     console.log("Token being sent", `Bearer ${token}`)
                     console.log("Uploaded profile pic : ",data);
                 }catch(error){

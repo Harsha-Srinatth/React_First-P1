@@ -36,15 +36,15 @@ const UpdateUserProfile = () => {
                     "Content-Type": "multipart/form-data"
                 }},
                 );
-            const result = await response.json();
+            // const result = await response.json();
     
-            if (response.ok) {
-            console.log('Upload successful:', result);
-            // Update UI or notify user
-            } else {
-            console.error('Upload failed:', result);
-            // Show error to user
-            }
+            // if (response.ok) {
+            // console.log('Upload successful:', result);
+            // // Update UI or notify user
+            // } else {
+            // console.error('Upload failed:', result);
+            // // Show error to user
+            // }
            console.log("Token being sent", `Bearer ${token}`)
            console.log("Uploaded profile pic : ",data);
             }catch(error){
