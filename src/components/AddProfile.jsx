@@ -34,9 +34,8 @@ const AddProfile = () => {
                         "Content-Type": "multipart/form-data"
                     }},
                     );
-                    const result = await response.json();
     
-                    if (response.ok) {
+                    if (data.ok) {
                     console.log('Upload successful:', result);
                     // Update UI or notify user
                     } else {
