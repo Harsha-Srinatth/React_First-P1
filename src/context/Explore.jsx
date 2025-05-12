@@ -16,7 +16,7 @@ const Users = () => {
     const delayDebounce = setTimeout(() => {
       if (search?.trim()) {
         api.get(`/explore/search?username=${search}`)
-          .then(responce => setUsers(responce.data))
+          .then(responce => console.log(setUsers(responce.data)))
           .catch(error => console.error("Error when finding for users", error))
         console.log(users);
       } else {
