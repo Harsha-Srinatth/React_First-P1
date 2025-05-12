@@ -16,7 +16,7 @@ const Users = () => {
     const delayDebounce = setTimeout(() => {
       if (search?.trim()) {
         api.get(`/explore/search?username=${search}`)
-          .then(responce => console.log(setUsers(responce.data)))
+          .then(responce => setUsers(responce.data))
           .catch(error => console.error("Error when finding for users", error))
         console.log(users);
       } else {
@@ -42,10 +42,10 @@ const Users = () => {
           <div className='flex flex-start p-5'>
             <div className='flex flex-col gap-4 '>
               {users.map(user => (
-                // const isFollowing = 
+               
                 <li key={user._id} onClick={() => goToProfile(user._id)} >
                   <div className='flex flex-row gap-3'>
-                    <img src={ user.user.imageUrl } className='flex flex-row bg-yellow-600 rounded-full' alt='' width={56} height={56} />
+                    <img src={ user.image.imageUrl } className='flex flex-row bg-yellow-600 rounded-full' alt='' width={56} height={56} />
                     <div className='flex flex-col gap-2'>
                       <h1 className='text-lg text-2rem font-semibold '>{user.username}</h1>
                       <p className='text-sm text-3rem'>{user.firstname}</p>
