@@ -52,6 +52,7 @@ const ShowFollowers = () => {
         };
         fetchData();
         console.log(followers);
+        console.log(image)
     },[userId, navigate]);
 
     if(loading) {
