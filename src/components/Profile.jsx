@@ -27,8 +27,8 @@ const Profile = () => {
                                 Authorization: `Bearer ${token}`
                          }}
                         );
-                         setDetails(res.data.details);
-                         console.log(res.data.details);
+                         setDetails(res.data);
+                         console.log(res.data);
                          setFollowers(res.data.followersCount);
                          setFollowing(res.data.followingCount);
                    
@@ -57,7 +57,7 @@ const Profile = () => {
                   <div className="h-32 sm:h-36 md:h-48 bg-gradient-to-r from-blue-500 to-purple-600 relative w-full">
                     {details.coverImage && (
                       <img 
-                        src={`${details.coverImage}`}
+                        src=""
                         alt="Cover"
                         className="w-full h-full object-cover"
                       />
