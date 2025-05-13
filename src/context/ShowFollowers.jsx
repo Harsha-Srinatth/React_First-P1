@@ -11,6 +11,7 @@ const ShowFollowers = () => {
 
     const [followers , setFollowers ] = useState([]);
     const [loading,setLoading] = useState('');
+    const [image,setImage] = useState('');
    
 
     useEffect(() => {
@@ -27,9 +28,11 @@ const ShowFollowers = () => {
                 if(res && res.data){
                      if(Array.isArray(res.data)){
                         setFollowers(res.data);
+                        setImage(res.data.image)
                         console.log("setting following data from aray responce ",res.data)
                     }else if( res.data.followers && Array.isArray(res.data.followers)){
                         setFollowers(res.data.followers);
+                        setImage(res.data.followers.image)
                         console.log("setting following data from res.data.following",res.data.followers)
                     }else{
                         console.warn("Following data is not an Array:",res.data);
@@ -72,7 +75,7 @@ const ShowFollowers = () => {
               {followers.map(user => (
                 <li key={user._id} >
                   <div className='flex flex-row gap-3'>
-                    <img src={ user.image } className='flex flex-row bg-yellow-600 rounded-full' alt='' width={56} height={56} />
+                    <img src={ image } className='flex flex-row bg-yellow-600 rounded-full' alt='' width={56} height={56} />
                     <div className='flex flex-col gap-2'>
                       <h1 className='text-lg text-2rem font-semibold '>{user.username}</h1>
                       <p className='text-sm text-3rem'>{user.firstname}</p>
