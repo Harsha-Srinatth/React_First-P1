@@ -11,6 +11,7 @@ const ShowProfile = () => {
   const [isFollowing, setIsFollowing] = useState(false); 
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('posts');
+  const [image,setImage] = useState('');
 
   useEffect(() => {
     const fetchUser = async() => {
@@ -22,12 +23,12 @@ const ShowProfile = () => {
           headers: {
             Authorization: `Bearer ${token}`
           }
-        });
-        
-        setUser(res.data.user);
+        });     
+        setUser(res.data);
         setFollowing(res.data.FollowingCount);
         setFollowers(res.data.FollowersCount);
         setIsFollowing(res.data.isFollowing);
+        setImage(res.data.image.userImage);
       } catch(error) {
         console.error(error);
         setIsFollowing(false);
@@ -87,7 +88,7 @@ const ShowProfile = () => {
       <div className="h-32 sm:h-36 md:h-48 bg-gradient-to-r from-blue-500 to-purple-600 relative w-full">
         {user.coverImage && (
           <img 
-            src={`https://backend-folder-hdib.onrender.com/uploads/${user.coverImage}`}
+            src={`${user.coverImage}`}
             alt="Cover"
             className="w-full h-full object-cover"
           />
@@ -103,7 +104,7 @@ const ShowProfile = () => {
             <div className="flex-shrink-0 -mt-8 md:-mt-12">
               <img 
                 className="rounded-full border-4 border-white shadow-md h-20 w-20 md:h-28 md:w-28 object-cover bg-gray-200"
-                src={`https://backend-folder-hdib.onrender.com/uploads/${user.image}`}
+                src={ image }
                 alt={user.username}
                 onError={(e) => {
                   e.target.onerror = null;
@@ -117,7 +118,7 @@ const ShowProfile = () => {
               <div>
                 <h1 className="text-lg md:text-2xl lg:text-3xl font-bold text-gray-800">{user.username}</h1>
                 {user.firstname && (
-                  <p className="text-sm md:text-base text-gray-600">{user.firstname} {user.lastname || ''}</p>
+                  <p className="text-sm md:text-base text-gray-600">{user.firstname}</p>
                 )}
               </div>
               
