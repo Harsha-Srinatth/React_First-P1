@@ -34,8 +34,8 @@ const Sidebar = ( ) => {
                      Authorization: `Bearer ${token}`
               }}
              );
-            setUsername(res.data.username);
-            setFirstname(res.data.firstname);
+            setUsername(res.data.details.username);
+            setFirstname(res.data.details.firstname);
             setImage( res.data.image);        
         }
     Data();
