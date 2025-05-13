@@ -36,7 +36,7 @@ const Sidebar = ( ) => {
              );
             setUsername(res.data.username);
             setFirstname(res.data.firstname);
-            setImage(res.data.image);         
+            setImage( res.data.image);        
         }
     Data();
     },[]);
@@ -56,7 +56,7 @@ const Sidebar = ( ) => {
              
                     <div className="flex gap-4  items-center" > 
                         <Link to="/upload-profile-img">
-                          <img src={ `https://backend-folder-hdib.onrender.com/uploads/${image}` } alt="profile" className='rounded-full w-10 h-10 bg-red-500 cursor-pointer'/>
+                          <img src={ image  } alt="profile" className='rounded-full w-10 h-10 bg-red-500 cursor-pointer'/>
                         </Link>
                      
                        <div className='flex flex-col text-white'>

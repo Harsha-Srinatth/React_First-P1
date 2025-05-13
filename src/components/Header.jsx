@@ -12,13 +12,11 @@ const Header =() =>{
    if(token){
      const decoded = jwtDecode(token);
      setUsername(decoded.username);
-     console.log(decoded.username);
    }
 },[]);
       const dropdownRef = useRef(null);
       const handleClick = () => {
-          
-          dropdownRef.current.classList.toggle('hidden');
+        dropdownRef.current.classList.toggle('hidden');
       }
    
     const handleLogout = () => {
