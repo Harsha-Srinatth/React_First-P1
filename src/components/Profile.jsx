@@ -14,6 +14,7 @@ const Profile = () => {
      const [followers ,setFollowers] = useState('');
      const [following ,setFollowing] = useState('');
      const [activeTab, setActiveTab] = useState('posts');
+     const [image,setImage] = useState('');
 
          useEffect(() => {
           setLoading(true);
@@ -31,6 +32,7 @@ const Profile = () => {
                          console.log(res.data);
                          setFollowers(res.data.followersCount);
                          setFollowing(res.data.followingCount);
+                         setImage(res.data.image.userImage);
                    
                 }catch(err){
                     console.log(err);
@@ -73,7 +75,7 @@ const Profile = () => {
                         <div className="flex-shrink-0 -mt-8 md:-mt-12">
                           <img 
                             className="rounded-full border-4 border-white shadow-md h-20 w-20 md:h-28 md:w-28 object-cover bg-gray-200"
-                            src= { details.image.userImage }
+                            src= { image }
                             alt={details.username}
                             onError={(e) => {
                               e.target.onerror = null;
