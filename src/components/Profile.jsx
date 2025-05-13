@@ -29,8 +29,8 @@ const Profile = () => {
                         );
                          setDetails(res.data.details);
                          console.log(res.data.details);
-                         setFollowers(res.data.FollowersCount);
-                         setFollowing(res.data.FollowingCount);
+                         setFollowers(res.data.followersCount);
+                         setFollowing(res.data.followingCount);
                    
                 }catch(err){
                     console.log(err);
@@ -57,7 +57,7 @@ const Profile = () => {
                   <div className="h-32 sm:h-36 md:h-48 bg-gradient-to-r from-blue-500 to-purple-600 relative w-full">
                     {details.coverImage && (
                       <img 
-                        src={`https://backend-folder-hdib.onrender.com/${details.coverImage}`}
+                        src={`${details.coverImage}`}
                         alt="Cover"
                         className="w-full h-full object-cover"
                       />
@@ -73,7 +73,7 @@ const Profile = () => {
                         <div className="flex-shrink-0 -mt-8 md:-mt-12">
                           <img 
                             className="rounded-full border-4 border-white shadow-md h-20 w-20 md:h-28 md:w-28 object-cover bg-gray-200"
-                            src={ `https://backend-folder-hdib.onrender.com/uploads/${details.image}` }
+                            src={ details.image.imageUrl }
                             alt={details.username}
                             onError={(e) => {
                               e.target.onerror = null;
