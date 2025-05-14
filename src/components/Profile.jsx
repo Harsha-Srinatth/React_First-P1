@@ -176,7 +176,7 @@ const Profile = () => {
                 </h1>
                 {details.firstname && (
                   <p className="text-sm md:text-base text-gray-400 mt-1">
-                    {details.firstname} {details.lastname || ''}
+                    {details.firstname}
                   </p>
                 )}
               </div>
