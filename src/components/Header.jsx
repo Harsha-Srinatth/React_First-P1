@@ -53,6 +53,7 @@ const Header =() =>{
 
                 <div ref={dropdownRef} 
                    className='hidden absolute right-0 mt-2 w-40 bg-black border rounded-lg shadow-lg z-50 font-semibold'>
+                    <Link to='/upload-profile-img' className='block px-4 py-2 text-sm text-white'>Add Profile</Link>
                   <a href='' className='block px-4 py-2 text-sm text-white'>Settings</a>
                   <a href='' className='block px-4 py-2 text-sm text-white'>About</a>
                   <a onClick={handleLogout} className='block px-4 py-2 text-sm text-white cursor-pointer'>Logout</a>
