@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
-import { Loader } from '../components/ui/Loader'; // Assuming you have a loader component
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -13,7 +12,7 @@ const Profile = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
   const [isCurrentUser, setIsCurrentUser] = useState(true);
-  const [userID, setUserID] = useState('');
+  const [userId, setUserId] = useState('');
 
   // Determine if the profile viewed is the current user's profile
   useEffect(() => {
@@ -23,7 +22,7 @@ const Profile = () => {
         const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
         
         if (userId) {
-          setUserID(userId);
+          setUserId(userId);
           
           // If viewing your own profile
           if (window.location.pathname === '/profile') {
