@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { SidebarLinks } from '../constance/Links';
-import { NavLink, useLocation, Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { pathname } = location;
-  
-  // Use the original structure that was working before
-  const [userData, setUserData] = useState({
-    firstname: '',
-    username: '',
-    image: ''
-  });
+
+  // Separate states
+  const [firstname, setFirstname] = useState('');
+  const [username, setUsername] = useState('');
+  const [image, setImage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLogout = () => {
@@ -37,30 +34,22 @@ const Sidebar = () => {
           return;
         }
 
-        const res = await api.get("/all-Details/C-U", {
+        const res = await api.get('/all-Details/C-U', {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization:` Bearer ${token} `
           }
         });
 
-        console.log("API Response:", res.data); // Debug log
+        const userInfo = res.data?.doc;
+        const profileImg = res.data?.image;
 
-        if (res.data?.details) {
-          // Use the original structure that was working before
-          setUserData({
-            firstname: res.data.details.firstname || 'Guest',
-            username: res.data.details.username || 'guest',
-            image: res.data.image || res.data.details.image || '/default-avatar.png'
-          });
-          
-          console.log("Updated userData state:", {
-            firstname: res.data.details.firstname || 'Guest',
-            username: res.data.details.username || 'guest',
-            image: res.data.image || res.data.details.image || '/default-avatar.png'
-          });
+        if (userInfo) {
+          setFirstname(userInfo.firstname || 'Guest');
+          setUsername(userInfo.username || 'guest');
+          setImage(profileImg);
         }
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
+        console.error('Failed to fetch user data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -69,35 +58,32 @@ const Sidebar = () => {
     fetchUserData();
   }, [navigate]);
 
-  // Instagram-style sidebar with wider width (64px) and showing labels
   return (
-    <div className="h-full flex flex-col justify-between w-64">
-      {/* Logo at the top */}
+    <div className="h-full flex flex-col justify-between w-64 bg-black">
+      {/* Logo */}
       <div className="flex justify-center items-center mb-8 pt-4">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-12 h-12 text-white p-2 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl" viewBox="0 0 24 24">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
         </svg>
       </div>
 
-      {/* Navigation Icons with Labels */}
+      {/* Navigation */}
       <nav className="flex-grow">
         <ul className="space-y-4 px-2">
           {SidebarLinks.map((link) => {
             const isActive = pathname === link.route;
             return (
               <li key={link.route}>
-                <NavLink 
+                <NavLink
                   to={link.route}
                   className={`relative flex items-center p-2 rounded-xl transition-all duration-300 group ${isActive ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'hover:bg-neutral-800'}`}
                 >
-                  <img 
+                  <img
                     src={link.imageURL}
                     alt={link.label}
-                    className={`w-7 h-7 mr-3 transition-all duration-300 ${isActive ? 'filter brightness-0 invert' : 'group-hover:scale-110'}`} 
+                    className={`w-7 h-7 mr-3 transition-all duration-300 ${isActive ? 'filter brightness-0 invert' : 'group-hover:scale-110'}`}
                   />
-                  <span className={`text-base font-medium ${isActive ? 'text-white' : 'text-gray-300'}`}>
-                    {link.label}
-                  </span>
+                  <span className="text-base font-medium text-gray-300">{link.label}</span>
                   {isActive && (
                     <span className="absolute -right-1 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-400 to-indigo-500 rounded-l"></span>
                   )}
@@ -108,21 +94,21 @@ const Sidebar = () => {
         </ul>
       </nav>
 
-      {/* User Profile & Logout at the bottom */}
+      {/* Profile & Logout */}
       <div className="flex flex-col space-y-4 mt-auto mb-6 px-3">
-        <Link to="/upload-profile-img" className="flex items-center group p-2 rounded-xl hover:bg-neutral-800">
+        <Link to="/upload-profile-img" className="flex items-center group p-3 rounded-xl hover:bg-neutral-800 bg-black space-x-4">
           {isLoading ? (
-            <div className="w-12 h-12 rounded-full bg-neutral-700 animate-pulse mr-3"></div>
+            <div className="w-16 h-16 rounded-full bg-neutral-700 animate-pulse mr-3"></div>
           ) : (
             <>
               <div className="relative">
-                <img 
-                  src={userData.image} 
-                  alt="profile" 
-                  className="rounded-full w-12 h-12 border-2 border-transparent group-hover:border-blue-400 transition-all duration-300 object-cover"
+                <img
+                  src={image}
+                  alt="profile"
+                  className="rounded-full w-16 h-16 border-2 border-transparent group-hover:border-blue-400 object-cover transition-all duration-300"
                   onError={(e) => {
                     e.target.onerror = null;
-                    console.log("Image load error, using default");
+                    e.target.src = '/default-avatar.png';
                   }}
                 />
                 <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-black bg-opacity-40 flex items-center justify-center transition-all duration-300">
@@ -131,16 +117,16 @@ const Sidebar = () => {
                   </svg>
                 </div>
               </div>
-              <div className="flex flex-col ml-3">
-                <h1 className="text-base font-medium text-white truncate">{userData.firstname}</h1>
-                <p className="text-sm text-gray-400 truncate">@{userData.username}</p>
+              <div className="flex flex-col">
+                <h1 className="text-lg font-semibold text-white truncate">{firstname}</h1>
+                <p className="text-sm text-gray-400 truncate">@{username}</p>
               </div>
             </>
           )}
         </Link>
 
-        <button 
-          onClick={handleLogout} 
+        <button
+          onClick={handleLogout}
           className="group flex items-center p-2 rounded-xl text-neutral-400 hover:text-white hover:bg-red-500 hover:bg-opacity-20 transition-all duration-300"
           title="Logout"
         >
