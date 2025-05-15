@@ -87,6 +87,9 @@ const Sidebar = () => {
                     title={link.label}
                     className={`relative w-6 h-6 transition-all duration-300 ${isActive ? 'filter brightness-0 invert' : 'group-hover:scale-110'}`} 
                   />
+                 
+                    <h1>{link.label}</h1>
+                 
                   {isActive && (
                     <span className="absolute -right-1 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-400 to-indigo-500 rounded-l"></span>
                   )}
@@ -109,6 +112,10 @@ const Sidebar = () => {
                 alt="profile" 
                 className="rounded-full w-10 h-10 border-2 border-transparent group-hover:border-blue-400 transition-all duration-300 object-cover"
               />
+              <div className='flex flex-col'>
+                <h1>{userData.firstname}</h1>
+                <p>@{userData.username}</p>
+              </div>
               <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-black bg-opacity-40 flex items-center justify-center transition-all duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
