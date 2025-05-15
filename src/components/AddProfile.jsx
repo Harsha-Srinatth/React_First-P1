@@ -113,7 +113,8 @@ const AddProfile = () => {
       const response = await  api.post('/upload-profile-img', formData, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+           "Content-Type": "multipart/form-data"
           // Note: Don't set Content-Type when using FormData, browser will set it automatically with boundary
         },
       });
