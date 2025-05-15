@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
+import api from '../services/api';
 
 const AddProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -109,7 +110,7 @@ const AddProfile = () => {
       const token = localStorage.getItem('token');
       
       // Example fetch API usage instead of the imported api service
-      const response = await fetch('/upload-profile-img', {
+      const response = await  api.post('/upload-profile-img', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
