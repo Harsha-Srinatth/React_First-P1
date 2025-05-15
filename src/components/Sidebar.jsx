@@ -12,10 +12,9 @@ const Sidebar = () => {
   const [userData, setUserData] = useState({
     firstname: '',
     username: '',
-    image: '/default-avatar.png' // Default image
+    image: '/default-avatar.png'
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     try {
@@ -60,16 +59,12 @@ const Sidebar = () => {
     fetchUserData();
   }, [navigate]);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  // Instagram-style sidebar for desktop
-  const desktopSidebar = (
-    <div className="h-full flex flex-col justify-between w-16 py-4">
+  // Instagram-style sidebar (optimized for your Dashboard layout)
+  return (
+    <div className="h-full flex flex-col justify-between">
       {/* Logo at the top */}
-      <div className="flex justify-center mb-6">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-8 h-8 text-white p-1 bg-blue-500 rounded-full" viewBox="0 0 24 24">
+      <div className="flex justify-center mb-8">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-10 h-10 text-white p-2 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl" viewBox="0 0 24 24">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
         </svg>
       </div>
@@ -83,19 +78,18 @@ const Sidebar = () => {
               <li key={link.route} className="flex justify-center">
                 <NavLink 
                   to={link.route}
-                  className={({ isActive }) => 
-                    `flex items-center justify-center p-2 rounded-xl transition-all duration-200 
-                    ${isActive 
-                      ? 'bg-blue-500 text-white' 
-                      : 'text-gray-300 hover:bg-blue-400 hover:text-white'}`
-                  }
+                  className={`relative flex items-center justify-center p-2 rounded-xl transition-all duration-300 group w-12 h-12`}
                 >
+                  <span className={`absolute inset-0 rounded-xl transition-all duration-300 ${isActive ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'bg-transparent group-hover:bg-neutral-800'}`}></span>
                   <img 
                     src={link.imageURL}
                     alt={link.label}
                     title={link.label}
-                    className={`w-6 h-6 ${isActive ? 'filter invert' : ''}`} 
+                    className={`relative w-6 h-6 transition-all duration-300 ${isActive ? 'filter brightness-0 invert' : 'group-hover:scale-110'}`} 
                   />
+                  {isActive && (
+                    <span className="absolute -right-1 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-400 to-indigo-500 rounded-l"></span>
+                  )}
                 </NavLink>
               </li>
             );
@@ -104,150 +98,38 @@ const Sidebar = () => {
       </nav>
 
       {/* User Profile & Logout at the bottom */}
-      <div className="flex flex-col items-center space-y-4">
+      <div className="flex flex-col items-center space-y-5 mt-auto">
         <Link to="/upload-profile-img" className="relative group">
           {isLoading ? (
-            <div className="w-8 h-8 rounded-full bg-neutral-700 animate-pulse"></div>
+            <div className="w-10 h-10 rounded-full bg-neutral-700 animate-pulse"></div>
           ) : (
-            <img 
-              src={userData.image} 
-              alt="profile" 
-              className="rounded-full w-8 h-8 border-2 border-transparent group-hover:border-blue-400 transition-all duration-300"
-            />
+            <div className="relative">
+              <img 
+                src={userData.image} 
+                alt="profile" 
+                className="rounded-full w-10 h-10 border-2 border-transparent group-hover:border-blue-400 transition-all duration-300 object-cover"
+              />
+              <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-black bg-opacity-40 flex items-center justify-center transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </div>
+            </div>
           )}
         </Link>
 
         <button 
           onClick={handleLogout} 
-          className="flex items-center justify-center p-2 rounded-xl text-gray-300 hover:bg-red-500 hover:text-white transition-all duration-300"
+          className="group relative p-2.5 rounded-xl text-neutral-400 hover:text-white transition-all duration-300"
           title="Logout"
         >
-          <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
+          <span className="absolute inset-0 rounded-xl bg-transparent group-hover:bg-red-500 group-hover:bg-opacity-20 transition-all duration-300"></span>
+          <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="relative w-5 h-5 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24">
             <path d="M5 12h14M12 5l7 7-7 7"></path>
           </svg>
         </button>
       </div>
     </div>
-  );
-
-  // Mobile Menu Button (separate from the sidebar)
-  const mobileMenuButton = (
-    <button 
-      onClick={toggleMobileMenu}
-      className="fixed lg:hidden top-4 left-4 z-40 p-2 rounded-md bg-blue-500 text-white shadow-lg"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
-  );
-
-  // Full Mobile Sidebar (shown when menu is open)
-  const mobileSidebar = (
-    <div className="fixed inset-0 z-30 lg:hidden">
-      {/* Overlay background */}
-      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={toggleMobileMenu}></div>
-      
-      {/* Mobile Sidebar Content */}
-      <div className="absolute inset-y-0 left-0 w-64 bg-neutral-950 shadow-lg">
-        {/* Logo and Welcome */}
-        <div className="p-4 border-b border-neutral-800">
-          <div className="flex items-center gap-3 mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-10 h-10 text-white p-2 bg-blue-500 rounded-full" viewBox="0 0 24 24">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-            <span className="text-lg font-bold text-white">
-              Welcome {userData.firstname}!
-            </span>
-          </div>
-
-          {/* User Profile */}
-          <div className="flex gap-4 items-center py-2">
-            <Link to="/upload-profile-img" className="relative group">
-              {isLoading ? (
-                <div className="w-12 h-12 rounded-full bg-neutral-700 animate-pulse"></div>
-              ) : (
-                <img 
-                  src={userData.image} 
-                  alt="profile" 
-                  className="rounded-full w-12 h-12 border-2 border-transparent group-hover:border-blue-400 transition-all duration-300"
-                />
-              )}
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 rounded-full flex items-center justify-center transition-all duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white opacity-0 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-            </Link>
-            <div className="flex flex-col text-white">
-              <p className="font-semibold">
-                {userData.firstname}
-              </p>
-              <p className="text-sm text-gray-400">
-                @{userData.username}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation Links */}
-        <nav className="px-3 py-4 flex-grow overflow-y-auto">
-          <ul className="space-y-1">
-            {SidebarLinks.map((link) => {
-              const isActive = pathname === link.route;
-              return (
-                <li key={link.route}>
-                  <NavLink 
-                    to={link.route}
-                    className={({ isActive }) => 
-                      `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 
-                      ${isActive 
-                        ? 'bg-blue-500 text-white font-semibold' 
-                        : 'text-gray-300 hover:bg-blue-400 hover:text-white'}`
-                    }
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <img 
-                      src={link.imageURL}
-                      alt=""
-                      className={`w-6 h-6 ${isActive ? 'filter invert' : ''}`} 
-                    />
-                    <span>{link.label}</span>
-                  </NavLink>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-        
-        {/* Logout Button */}
-        <div className="p-4 border-t border-neutral-800">
-          <button 
-            onClick={handleLogout} 
-            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-400 py-2.5 px-4 rounded-lg text-white font-medium hover:from-blue-600 hover:to-cyan-500 transition-all duration-300 shadow-md"
-          >
-            Logout
-            <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4" viewBox="0 0 24 24">
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <>
-      {/* Desktop Sidebar */}
-      {desktopSidebar}
-      
-      {/* Mobile Menu Button */}
-      {mobileMenuButton}
-      
-      {/* Mobile Sidebar (conditionally rendered) */}
-      {isMobileMenuOpen && mobileSidebar}
-    </>
   );
 };
 
