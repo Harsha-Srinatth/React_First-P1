@@ -36,10 +36,11 @@ const Sidebar = () => {
 
         const res = await api.get('/all-Details/C-U', {
           headers: {
-            Authorization:` Bearer ${token} `
+             Authorization: `Bearer ${token}`
           }
         });
-
+        console.log(res.data);
+        console.log(resizeBy.data?.doc);
         const userInfo = res.data?.doc;
         const profileImg = res.data?.image;
 
@@ -65,6 +66,7 @@ const Sidebar = () => {
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-12 h-12 text-white p-2 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl" viewBox="0 0 24 24">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
         </svg>
+        <h1 className='text-white'>Welcome {username}.!</h1>
       </div>
 
       {/* Navigation */}
@@ -118,7 +120,7 @@ const Sidebar = () => {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-lg font-semibold text-white truncate">{firstname}</h1>
-                <p className="text-sm text-gray-400 truncate">@{username}</p>
+                <p className="text-sm text-white truncate">@{username}</p>
               </div>
             </>
           )}
