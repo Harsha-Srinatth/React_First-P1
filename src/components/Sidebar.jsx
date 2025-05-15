@@ -9,10 +9,12 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { pathname } = location;
   
-  // Updated state management for better handling of user data
-  const [firstname, setFirstname] = useState('');
-  const [username, setUsername] = useState('');
-  const [profileImage, setProfileImage] = useState('/default-avatar.png');
+  // Use the original structure that was working before
+  const [userData, setUserData] = useState({
+    firstname: '',
+    username: '',
+    image: '/default-avatar.png'
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLogout = () => {
@@ -41,18 +43,21 @@ const Sidebar = () => {
           }
         });
 
-        console.log("API Response:", res.data); // Debug log to see the response
+        console.log("API Response:", res.data); // Debug log
 
         if (res.data?.details) {
-          setFirstname(res.data.details.firstname || 'Guest');
-          setUsername(res.data.details.username || 'guest');
+          // Use the original structure that was working before
+          setUserData({
+            firstname: res.data.details.firstname || 'Guest',
+            username: res.data.details.username || 'guest',
+            image: res.data.image || res.data.details.image || '/default-avatar.png'
+          });
           
-          // Handle image data correctly based on your API response structure
-          if (res.data.image) {
-            setProfileImage(res.data.image);
-          } else if (res.data.details.image) {
-            setProfileImage(res.data.details.image);
-          }
+          console.log("Updated userData state:", {
+            firstname: res.data.details.firstname || 'Guest',
+            username: res.data.details.username || 'guest',
+            image: res.data.image || res.data.details.image || '/default-avatar.png'
+          });
         }
       } catch (error) {
         console.error("Failed to fetch user data:", error);
@@ -112,9 +117,14 @@ const Sidebar = () => {
             <>
               <div className="relative">
                 <img 
-                  src={profileImage} 
+                  src={userData.image} 
                   alt="profile" 
                   className="rounded-full w-12 h-12 border-2 border-transparent group-hover:border-blue-400 transition-all duration-300 object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/default-avatar.png';
+                    console.log("Image load error, using default");
+                  }}
                 />
                 <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-black bg-opacity-40 flex items-center justify-center transition-all duration-300">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,8 +133,8 @@ const Sidebar = () => {
                 </div>
               </div>
               <div className="flex flex-col ml-3">
-                <h1 className="text-base font-medium text-white truncate">{firstname}</h1>
-                <p className="text-sm text-gray-400 truncate">@{username}</p>
+                <h1 className="text-base font-medium text-white truncate">{userData.firstname}</h1>
+                <p className="text-sm text-gray-400 truncate">@{userData.username}</p>
               </div>
             </>
           )}
