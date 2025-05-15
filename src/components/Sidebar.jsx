@@ -108,7 +108,6 @@ const Sidebar = () => {
                   className="rounded-full w-16 h-16 border-2 border-transparent group-hover:border-blue-400 object-cover transition-all duration-300"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/default-avatar.png';
                   }}
                 />
                 <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 bg-black bg-opacity-40 flex items-center justify-center transition-all duration-300">
