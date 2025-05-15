@@ -8,7 +8,7 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen w-full dark bg-black text-white">
       {/* Sidebar - fixed width like Instagram (64px on large screens) */}
-      <aside className="hidden lg:block lg:w-16 h-full dark bg-gray-800">
+      <aside className="hidden lg:block lg:w-64 h-full dark bg-gray-800">
         <Sidebar />
       </aside>
       
