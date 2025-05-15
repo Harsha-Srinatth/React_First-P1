@@ -7,8 +7,10 @@ import Bottombar from '../components/Bottombar';
 const Dashboard = () => {
   return (
     <div className="flex h-screen w-full dark bg-black text-white">
-      {/* The Sidebar component now handles its own visibility */}
-      <Sidebar />
+      {/* Sidebar - fixed width like Instagram (64px on large screens) */}
+      <aside className="hidden lg:block lg:w-16 h-full dark bg-gray-800">
+        <Sidebar />
+      </aside>
       
       {/* Main Content Container */}
       <div className="flex flex-1 flex-col min-h-screen">

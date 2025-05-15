@@ -64,20 +64,92 @@ const Sidebar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  return (
-    <>
-      {/* Mobile Menu Button */}
-      <button 
-        onClick={toggleMobileMenu}
-        className="fixed lg:hidden top-4 left-4 z-40 p-2 rounded-md bg-blue-500 text-white shadow-lg"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+  // Instagram-style sidebar for desktop
+  const desktopSidebar = (
+    <div className="h-full flex flex-col justify-between w-16 py-4">
+      {/* Logo at the top */}
+      <div className="flex justify-center mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-8 h-8 text-white p-1 bg-blue-500 rounded-full" viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
         </svg>
-      </button>
+      </div>
 
-      {/* Sidebar Content - now adapts to Dashboard parent component */}
-      <div className="h-full w-full">
+      {/* Navigation Icons */}
+      <nav className="flex-grow flex flex-col items-center">
+        <ul className="space-y-6 w-full">
+          {SidebarLinks.map((link) => {
+            const isActive = pathname === link.route;
+            return (
+              <li key={link.route} className="flex justify-center">
+                <NavLink 
+                  to={link.route}
+                  className={({ isActive }) => 
+                    `flex items-center justify-center p-2 rounded-xl transition-all duration-200 
+                    ${isActive 
+                      ? 'bg-blue-500 text-white' 
+                      : 'text-gray-300 hover:bg-blue-400 hover:text-white'}`
+                  }
+                >
+                  <img 
+                    src={link.imageURL}
+                    alt={link.label}
+                    title={link.label}
+                    className={`w-6 h-6 ${isActive ? 'filter invert' : ''}`} 
+                  />
+                </NavLink>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      {/* User Profile & Logout at the bottom */}
+      <div className="flex flex-col items-center space-y-4">
+        <Link to="/upload-profile-img" className="relative group">
+          {isLoading ? (
+            <div className="w-8 h-8 rounded-full bg-neutral-700 animate-pulse"></div>
+          ) : (
+            <img 
+              src={userData.image} 
+              alt="profile" 
+              className="rounded-full w-8 h-8 border-2 border-transparent group-hover:border-blue-400 transition-all duration-300"
+            />
+          )}
+        </Link>
+
+        <button 
+          onClick={handleLogout} 
+          className="flex items-center justify-center p-2 rounded-xl text-gray-300 hover:bg-red-500 hover:text-white transition-all duration-300"
+          title="Logout"
+        >
+          <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+
+  // Mobile Menu Button (separate from the sidebar)
+  const mobileMenuButton = (
+    <button 
+      onClick={toggleMobileMenu}
+      className="fixed lg:hidden top-4 left-4 z-40 p-2 rounded-md bg-blue-500 text-white shadow-lg"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  );
+
+  // Full Mobile Sidebar (shown when menu is open)
+  const mobileSidebar = (
+    <div className="fixed inset-0 z-30 lg:hidden">
+      {/* Overlay background */}
+      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={toggleMobileMenu}></div>
+      
+      {/* Mobile Sidebar Content */}
+      <div className="absolute inset-y-0 left-0 w-64 bg-neutral-950 shadow-lg">
         {/* Logo and Welcome */}
         <div className="p-4 border-b border-neutral-800">
           <div className="flex items-center gap-3 mb-6">
@@ -162,16 +234,19 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
+    </div>
+  );
 
-      {/* Mobile Sidebar (positioned fixed) - shown only on mobile when menu is open */}
-      {!isMobileMenuOpen ? null : (
-        <div className="fixed inset-0 z-30 lg:hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={toggleMobileMenu}></div>
-          <div className="absolute inset-y-0 left-0 w-64 bg-neutral-950 shadow-lg">
-            <Sidebar />
-          </div>
-        </div>
-      )}
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      {desktopSidebar}
+      
+      {/* Mobile Menu Button */}
+      {mobileMenuButton}
+      
+      {/* Mobile Sidebar (conditionally rendered) */}
+      {isMobileMenuOpen && mobileSidebar}
     </>
   );
 };
