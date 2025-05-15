@@ -40,8 +40,8 @@ const Sidebar = () => {
           }
         });
         console.log(res.data);
-        console.log(resizeBy.data?.doc);
-        const userInfo = res.data?.doc;
+        console.log(resizeBy.data?._doc);
+        const userInfo = res.data?._doc;
         const profileImg = res.data?.image;
 
         if (userInfo) {
