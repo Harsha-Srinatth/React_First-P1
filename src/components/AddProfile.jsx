@@ -135,8 +135,8 @@ const AddProfile = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Profile Photo</h1>
+    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-6 bg-gray-950 rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold text-white mb-6">Profile Photo</h1>
       
       {/* Profile photo circle */}
       <div 
