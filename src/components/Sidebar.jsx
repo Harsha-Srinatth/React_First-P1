@@ -41,12 +41,17 @@ const Sidebar = () => {
           }
         });
 
+        console.log("API Response:", res.data); // Debug log to see the response
+
         if (res.data?.details) {
           setFirstname(res.data.details.firstname || 'Guest');
           setUsername(res.data.details.username || 'guest');
-          // Handle base64 image separately
+          
+          // Handle image data correctly based on your API response structure
           if (res.data.image) {
             setProfileImage(res.data.image);
+          } else if (res.data.details.image) {
+            setProfileImage(res.data.details.image);
           }
         }
       } catch (error) {
