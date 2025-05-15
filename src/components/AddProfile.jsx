@@ -127,7 +127,6 @@ const AddProfile = () => {
       console.log("Uploaded profile pic:", data);
       setUploadSuccess(true);
     } catch (error) {
-      console.error(error);
       setError('Failed to upload image. Please try again.');
     } finally {
       setIsUploading(false);
