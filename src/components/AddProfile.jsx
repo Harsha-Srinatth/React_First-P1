@@ -110,13 +110,12 @@ const AddProfile = () => {
       const token = localStorage.getItem('token');
       
       // Example fetch API usage instead of the imported api service
-      const response = await  api.post('/upload-profile-img', {
+      const response = await  api.post('/upload-profile-img', formData, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
           // Note: Don't set Content-Type when using FormData, browser will set it automatically with boundary
         },
-        body: formData
       });
       
       if (!response.ok) {
