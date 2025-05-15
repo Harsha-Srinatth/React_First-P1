@@ -8,20 +8,20 @@ import Bottombar from '../components/Bottombar';
 const Dashboard = () => {
   
   return (
-    <div className={`flex h-screen flex-col md:flex-row ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-gray-800'}`}>
+    <div className={`flex h-screen flex-col md:flex-row  dark bg-black text-white`}>
       {/* Sidebar - changes colors based on theme */}
-      <aside className={`hidden lg:block lg:w-64 lg:relative h-full ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
+      <aside className={`hidden lg:block lg:w-64 lg:relative h-full dark bg-gray-800 `}>
         <Sidebar />
       </aside>
       
       <div className="flex flex-1 flex-col min-h-screen">
         {/* Mobile Header */}
-        <div className={`lg:hidden p-4 ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+        <div className={`lg:hidden p-4 dark bg-black`}>
           <Header />
         </div>
         
         {/* Main Content Area */}
-        <section className={`flex flex-1 h-full overflow-y-scroll pb-20 p-4 mt-2 ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+        <section className={`flex flex-1 h-full overflow-y-scroll pb-20 p-4 mt-2 dark bg-black `}>
           <Outlet />
         </section>
         
