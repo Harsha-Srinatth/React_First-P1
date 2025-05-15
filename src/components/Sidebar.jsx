@@ -13,7 +13,7 @@ const Sidebar = () => {
   const [userData, setUserData] = useState({
     firstname: '',
     username: '',
-    image: '/default-avatar.png'
+    image: ''
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -122,7 +122,6 @@ const Sidebar = () => {
                   className="rounded-full w-12 h-12 border-2 border-transparent group-hover:border-blue-400 transition-all duration-300 object-cover"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/default-avatar.png';
                     console.log("Image load error, using default");
                   }}
                 />
