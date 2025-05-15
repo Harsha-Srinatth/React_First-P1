@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SidebarLinks } from '../constance/Links';
-import { NavLink, useLocation, Link, Outlet } from 'react-router-dom';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -65,23 +65,19 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <>
       {/* Mobile Menu Button */}
       <button 
         onClick={toggleMobileMenu}
-        className="md:hidden fixed top-4 left-4 z-40 p-2 rounded-md bg-blue-500 text-white shadow-lg"
+        className="fixed lg:hidden top-4 left-4 z-40 p-2 rounded-md bg-blue-500 text-white shadow-lg"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
 
-      {/* Sidebar - Desktop (always visible) & Mobile (conditionally visible) */}
-      <div 
-        className={`fixed z-30 md:translate-x-0 transform transition-transform duration-300 ease-in-out
-        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
-        bg-neutral-950 md:relative md:flex flex-col w-64 h-screen overflow-y-auto shadow-lg`}
-      >
+      {/* Sidebar Content - now adapts to Dashboard parent component */}
+      <div className="h-full w-full">
         {/* Logo and Welcome */}
         <div className="p-4 border-b border-neutral-800">
           <div className="flex items-center gap-3 mb-6">
@@ -124,7 +120,7 @@ const Sidebar = () => {
         </div>
 
         {/* Navigation Links */}
-        <nav className="px-3 py-4 flex-grow">
+        <nav className="px-3 py-4 flex-grow overflow-y-auto">
           <ul className="space-y-1">
             {SidebarLinks.map((link) => {
               const isActive = pathname === link.route;
@@ -138,11 +134,12 @@ const Sidebar = () => {
                         ? 'bg-blue-500 text-white font-semibold' 
                         : 'text-gray-300 hover:bg-blue-400 hover:text-white'}`
                     }
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <img 
                       src={link.imageURL}
                       alt=""
-                      className={`w-6 h-6 ${isActive ? 'invert' : 'group-hover:invert'}`} 
+                      className={`w-6 h-6 ${isActive ? 'filter invert' : ''}`} 
                     />
                     <span>{link.label}</span>
                   </NavLink>
@@ -166,21 +163,16 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 md:ml-64">
-        <div className="p-6 h-screen overflow-y-auto">
-          <Outlet />
+      {/* Mobile Sidebar (positioned fixed) - shown only on mobile when menu is open */}
+      {!isMobileMenuOpen ? null : (
+        <div className="fixed inset-0 z-30 lg:hidden">
+          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={toggleMobileMenu}></div>
+          <div className="absolute inset-y-0 left-0 w-64 bg-neutral-950 shadow-lg">
+            <Sidebar />
+          </div>
         </div>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
-          onClick={toggleMobileMenu}
-        />
       )}
-    </div>
+    </>
   );
 };
 
