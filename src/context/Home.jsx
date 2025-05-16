@@ -1,106 +1,148 @@
 import React from 'react';
 import api from '../services/api';
-import { useState , useEffect} from 'react'
+import { useState, useEffect } from 'react';
+import { Heart, MessageCircle, X } from 'lucide-react';
 import Likes from './Likes';
-import Comments from './Comments'
-  
-  const Posts = ()=>{
-        const [post, setPost] = useState([]);
-        const [loading,setLoading] = useState(true);
-      
-      useEffect(() => {
-        try{
-            const fetchData = async() => {
-            const res = await api.get('/post');
-            console.log("raw responce",res);
-            setPost(res.data);      
-               };
-            fetchData();
-        }catch(error){
-          console.log(error);
-        }finally{
-          setLoading(false);
-        }
-      },[]);
-      
-       if(loading) {
-          return (
-            <div className="flex items-center justify-center h-full w-full p-4">
-              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
-            </div>
-          );
-        }
-    return(
-    <>
-   
-<div className='flex flex-col flex-1 p-2'>
-  
-    {post.length>0 ? (
-      post.map((post) => (
-          <li key={post._id}>
-    <div className='grid grid-col-1 gap-1'>
-    <div className="max-w-xl min-w-sm mx-auto bg-black shadow-md rounded-lg overflow-hidden my-3">
-        {/* User Info */}
-        <div className="flex items-center px-4 py-3">
-          {post.user.imageUrl && ( <img
-                className="w-10 h-10 rounded-full"
-                src={ post.user.imageUrl }
-                alt="Profile"
-              />
-            )}
-        <div className="ml-3">
-          <p className="text-white font-semibold">{post.caption}</p>
-          <p className="text-gray-500 text-sm">2 hours ago</p>
-        </div>
-      </div>
+import Comments from './Comments';
 
-      {/* Post Image */}
-      { post.imageUrl && <img
-        className="w-full h-96 object-cover rounded-lg"
-        src= { post.imageUrl }
-        alt="Post"
-        width={96}
-        height={77}
-      /> }
-        <div className='text-white'>
-          <p>{post.tags}</p>
-          <p>{post.location}</p>
-        </div>
-      
-      {/* Engagement Options */}
-      <div className="px-4 py-3">
-        <div className="flex justify-between text-white">
-          <div className="flex gap-4">
-            <div className='flex flex-start'>
-                <Likes postId={post._id}
-                  initialLikesCount = {post.likes.length}
-                  initiallyLiked = {post.likedByUser}
-                />
-             </div> 
-            
-            <div className="flex items-center flex-col mt-3">
-               <Comments  postId= {post._id} Count={post.comments.length} comment={post.comments} userId ={post.userId} />
-             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-</div>
+const Posts = () => {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeComments, setActiveComments] = useState(null);
 
-         </li>
-        ))
-    ) : (
-      <div className='text-white text-center'>
-        <p className='text-xl'>No posts available </p>
-      </div>
-    )}
-  
-</div>
-
-   
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await api.get('/post');
+        console.log("raw response", res);
+        setPosts(res.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
     
-   
-    </>
-  )
+    fetchData();
+  }, []);
+
+  const toggleComments = (postId) => {
+    if (activeComments === postId) {
+      setActiveComments(null);
+    } else {
+      setActiveComments(postId);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full w-full p-4">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col flex-1 p-2 max-w-xl mx-auto w-full">
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <div key={post._id} className="relative mb-6">
+            <div className="bg-black shadow-md rounded-lg overflow-hidden">
+              {/* User Info */}
+              <div className="flex items-center px-4 py-3">
+                {post.user.imageUrl && (
+                  <img
+                    className="w-10 h-10 rounded-full object-cover"
+                    src={post.user.imageUrl}
+                    alt="Profile"
+                  />
+                )}
+                <div className="ml-3">
+                  <p className="text-white font-semibold">{post.caption}</p>
+                  <p className="text-gray-500 text-sm">2 hours ago</p>
+                </div>
+              </div>
+
+              {/* Post Image */}
+              {post.imageUrl && (
+                <div className="w-full aspect-square overflow-hidden">
+                  <img
+                    className="w-full h-full object-cover"
+                    src={post.imageUrl}
+                    alt="Post"
+                  />
+                </div>
+              )}
+
+              {/* Tags and Location */}
+              <div className="px-4 pt-3 text-gray-300 text-sm">
+                {post.tags && <p className="mb-1">{post.tags}</p>}
+                {post.location && (
+                  <p className="flex items-center">
+                    <span>📍</span>
+                    <span className="ml-1">{post.location}</span>
+                  </p>
+                )}
+              </div>
+
+              {/* Engagement Options */}
+              <div className="px-4 py-3">
+                <div className="flex justify-between text-white">
+                  <div className="flex gap-6">
+                    <div className="flex items-center">
+                      <Likes
+                        postId={post._id}
+                        initialLikesCount={post.likes.length}
+                        initiallyLiked={post.likedByUser}
+                      />
+                    </div>
+                    
+                    <div 
+                      className="flex items-center cursor-pointer"
+                      onClick={() => toggleComments(post._id)}
+                    >
+                      <MessageCircle className="mr-2" size={20} />
+                      <span>{post.comments.length}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Comments Overlay */}
+            {activeComments === post._id && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
+                <div className="bg-gray-900 rounded-lg w-full max-w-lg max-h-[80vh] overflow-hidden flex flex-col">
+                  <div className="flex justify-between items-center p-4 border-b border-gray-800">
+                    <h3 className="text-white font-medium">Comments</h3>
+                    <button 
+                      onClick={() => setActiveComments(null)}
+                      className="text-gray-400 hover:text-white"
+                    >
+                      <X size={20} />
+                    </button>
+                  </div>
+                  
+                  <div className="flex-1 overflow-y-auto p-4">
+                    <Comments
+                      postId={post._id}
+                      Count={post.comments.length}
+                      comment={post.comments}
+                      userId={post.userId}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ))
+      ) : (
+        <div className="text-white text-center py-10">
+          <p className="text-xl">No posts available</p>
+        </div>
+      )}
+    </div>
+  );
 };
+
 export default Posts;

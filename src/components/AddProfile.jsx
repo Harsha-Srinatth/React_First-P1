@@ -122,9 +122,6 @@ const AddProfile = () => {
       if (!response.ok) {
         throw new Error('Server responded with an error');
       }
-      
-      const data = await response.json();
-      console.log("Uploaded profile pic:", data);
       setUploadSuccess(true);
     } catch (error) {
       setError('Failed to upload image. Please try again.');
