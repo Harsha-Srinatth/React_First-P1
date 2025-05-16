@@ -1,14 +1,14 @@
 import React from 'react';
 import api from '../services/api';
 import { useState, useEffect } from 'react';
-import { Heart, MessageCircle, X } from 'lucide-react';
+import { Heart, MessageCircle } from 'lucide-react';
 import Likes from './Likes';
 import Comments from './Comments';
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeComments, setActiveComments] = useState(null);
+  const [expandedPost, setExpandedPost] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,11 +27,7 @@ const Posts = () => {
   }, []);
 
   const toggleComments = (postId) => {
-    if (activeComments === postId) {
-      setActiveComments(null);
-    } else {
-      setActiveComments(postId);
-    }
+    setExpandedPost(expandedPost === postId ? null : postId);
   };
 
   if (loading) {
@@ -46,8 +42,8 @@ const Posts = () => {
     <div className="flex flex-col flex-1 p-2 max-w-xl mx-auto w-full">
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post._id} className="relative mb-6">
-            <div className="bg-black shadow-md rounded-lg overflow-hidden">
+          <div key={post._id} className="mb-6">
+            <div className="bg-black shadow-md rounded-lg overflow-hidden border border-gray-800">
               {/* User Info */}
               <div className="flex items-center px-4 py-3">
                 {post.user.imageUrl && (
@@ -101,43 +97,30 @@ const Posts = () => {
                       className="flex items-center cursor-pointer"
                       onClick={() => toggleComments(post._id)}
                     >
-                      <MessageCircle className="mr-2" size={20} />
+                      <MessageCircle 
+                        className={`mr-2 ${expandedPost === post._id ? 'text-purple-500' : 'text-white'}`} 
+                        size={20} 
+                      />
                       <span>{post.comments.length}</span>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Comments Overlay */}
-            {activeComments === post._id && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4">
-                <div className="bg-gray-900 rounded-lg w-full max-w-lg max-h-[80vh] overflow-hidden flex flex-col">
-                  <div className="flex justify-between items-center p-4 border-b border-gray-800">
-                    <h3 className="text-white font-medium">Comments</h3>
-                    <button 
-                      onClick={() => setActiveComments(null)}
-                      className="text-gray-400 hover:text-white"
-                    >
-                      <X size={20} />
-                    </button>
-                  </div>
-                  
-                  <div className="flex-1 overflow-y-auto p-4">
-                    <Comments
-                      postId={post._id}
-                      Count={post.comments.length}
-                      comment={post.comments}
-                      userId={post.userId}
-                    />
-                  </div>
-                </div>
+              
+              {/* Comments Section - Always visible but collapsible */}
+              <div className={`border-t border-gray-800 px-4 py-3 ${expandedPost === post._id ? 'block' : 'hidden'}`}>
+                <Comments
+                  postId={post._id}
+                  Count={post.comments.length}
+                  comment={post.comments}
+                  userId={post.userId}
+                />
               </div>
-            )}
+            </div>
           </div>
         ))
       ) : (
-        <div className="text-white text-center py-10">
+        <div className="text-white text-center py-10 bg-black bg-opacity-80 rounded-lg border border-gray-800">
           <p className="text-xl">No posts available</p>
         </div>
       )}
