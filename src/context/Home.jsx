@@ -1,7 +1,7 @@
 import React from 'react';
 import api from '../services/api';
 import { useState, useEffect } from 'react';
-import { MessageCircle, X } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import Likes from './Likes';
 import Comments from './Comments';
 
@@ -55,7 +55,7 @@ const Posts = () => {
                   />
                 )}
                 <div className="ml-3">
-                  <p className="text-white font-semibold">{post.user.username || "User"}</p>
+                  <p className="text-white font-semibold">{post.userId.username || "User"}</p>
                   <p className="text-gray-500 text-xs flex items-center">
                     <span> {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Just now"}</span>
                     {post.location && (
@@ -130,7 +130,7 @@ const Posts = () => {
                       onClick={() => setActiveComments(null)}
                       className="absolute -top-10 right-0 text-white hover:text-gray-300"
                     >
-                      <X size={24} />
+                     
                     </button>
                     
                     <Comments
