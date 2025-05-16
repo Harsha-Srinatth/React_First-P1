@@ -46,7 +46,8 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
       
       // Update comments and count
       setComments(prev => [...prev, res.data.comment || res.data]);
-      setCount(res.data.count || count + 1);
+      // Update count correctly
+      setCount(prevCount => prevCount + 1);
       setText(''); // Clear input
     } catch (error) {
       console.error("Error posting comment:", error);
@@ -63,7 +64,7 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
     
     try {
       const token = localStorage.getItem('token');
-      const res = await api.delete(`/comments/${commentId}`, {
+      await api.delete(`/comments/${commentId}`, {
         data: { postId },
         headers: {
           Authorization: `Bearer ${token}`
@@ -71,7 +72,8 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
       });
       
       setComments(prev => prev.filter(comment => comment._id !== commentId));
-      setCount(res.data.count || count - 1);
+      // Update count correctly
+      setCount(prevCount => prevCount - 1);
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -101,19 +103,23 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
             {comments.map((comment, index) => (
               <div key={comment._id || index} className="mb-3 bg-gray-800 bg-opacity-80 p-3 rounded-lg border border-gray-700">
                 <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="text-purple-300 text-sm font-medium mb-1">
-                      {comment.user?.username || "User"}
-                    </p>
-                    <p className="text-white">{comment.text}</p>
-                    <p className="text-gray-400 text-xs mt-1">
-                      {comment.createdAt ? new Date(comment.createdAt).toLocaleDateString() : "Just now"}
-                    </p>
+                  <div className="flex items-start">
+                    {/* Space for user profile picture */}
+                    <div className="w-8 h-8 rounded-full bg-gray-700 mr-3 flex-shrink-0"></div>
+                    <div className="flex-1">
+                      <p className="text-purple-300 text-sm font-medium mb-1">
+                        {comment.user?.username || "User"}
+                      </p>
+                      <p className="text-white">{comment.text}</p>
+                      <p className="text-gray-400 text-xs mt-1">
+                        {comment.createdAt ? new Date(comment.createdAt).toLocaleDateString() : "Just now"}
+                      </p>
+                    </div>
                   </div>
                   {comment.user?._id === userId && (
                     <button 
                       onClick={() => deleteComment(comment._id)}
-                      className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                      className="text-gray-400 hover:text-red-500 transition-colors p-1 ml-2"
                     >
                       <Trash2 size={16} />
                     </button>

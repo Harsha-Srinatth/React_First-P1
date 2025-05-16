@@ -57,7 +57,7 @@ const Posts = () => {
                 <div className="ml-3">
                   <p className="text-white font-semibold">{post.user.username || "User"}</p>
                   <p className="text-gray-500 text-xs flex items-center">
-                    <span>2 hours ago</span>
+                    <span> {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Just now"}</span>
                     {post.location && (
                       <>
                         <span className="mx-1">•</span>
