@@ -31,23 +31,32 @@ const YourPosts = () => {
   }, []);
   
   const deletePost = async(postId) => {
-    setLoading(true);
     if(!postId) {
       console.error("postID is Undefined");
       return;
     }
+    
     try {
+      // Optimistically update UI first
+      setUserposts(prevPosts => prevPosts.filter(post => post._id !== postId));
+      
+      // Then make API call
       await api.delete(`/posts/${postId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      // Remove the deleted post from state to update UI immediately
-      setUserposts(prevPosts => prevPosts.filter(post => post._id !== postId));
+      
+      console.log("Post deleted successfully:", postId);
     } catch(error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+      console.error("Error deleting post:", error);
+      // If deletion fails, revert the UI change by fetching posts again
+      const res = await api.get('/user/posts', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+      setUserposts(res.data);
     }
   };
 
