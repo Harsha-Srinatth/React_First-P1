@@ -185,7 +185,7 @@ const UpdateUserProfile = () => {
             />
             
             <button
-              onClick={handleProfileSubmit}
+              
               disabled={!profile || isUploading}
               className={`px-4 py-2 rounded-lg text-white font-medium text-sm transition-colors w-full
                 ${!profile || isUploading 
