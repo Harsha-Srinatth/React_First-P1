@@ -60,7 +60,7 @@ const Sidebar = () => {
   }, [navigate]);
 
   return (
-    <div className="h-full flex flex-col justify-between w-64 bg-black">
+    <div className="h-full flex flex-col justify-between w-64 bg-zinc-950">
       {/* Logo */}
       <div className="flex justify-center gap-2 items-center mb-8 pt-4">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-9 h-9 text-white p-2 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl" viewBox="0 0 24 24">
