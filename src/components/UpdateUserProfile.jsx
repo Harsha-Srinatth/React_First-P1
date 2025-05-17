@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
+import api from '../services/api'
 
 const UpdateUserProfile = () => {
   const [username, setUsername] = useState('');
@@ -90,51 +91,6 @@ const UpdateUserProfile = () => {
     });
   };
 
-  const handleProfileSubmit = async (e) => {
-    if (e) e.preventDefault();
-    if (!profile) {
-      setError('Please select an image first');
-      return;
-    }
-
-    try {
-      setIsUploading(true);
-      setError('');
-      
-      // Compress the image
-      const compressedFile = await compressImage(profile);
-      console.log('Compressed image size:', compressedFile.size / 1024 / 1024, 'MB');
-      
-      const formData = new FormData();
-      formData.append("profilePhoto", compressedFile);
-      
-      // Get token from localStorage
-      const token = localStorage.getItem('token');
-      
-      // Example fetch API usage instead of the imported api service
-      const response = await fetch('/upload-profile-img', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData
-      });
-      
-      if (!response.ok) {
-        throw new Error('Server responded with an error');
-      }
-      
-      const data = await response.json();
-      console.log("Uploaded profile pic:", data);
-      setUploadSuccess(true);
-    } catch (error) {
-      console.error(error);
-      setError('Failed to upload image. Please try again.');
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     
@@ -146,23 +102,22 @@ const UpdateUserProfile = () => {
     try {
       setIsUploading(true);
       setError('');
+       // Compress the image
+      const compressedFile = await compressImage(profile);
+      console.log('Compressed image size:', compressedFile.size / 1024 / 1024, 'MB');
+      
+      const formData = new FormData();
+      formData.append("profilePhoto", compressedFile);
+      formData.append('firstname',firstname);
+      formData.append('username',username);
       
       const token = localStorage.getItem('token');
-      const user = { username, firstname };
-      
-      // Only include fields that have values
-      const userData = Object.fromEntries(
-        Object.entries(user).filter(([_, value]) => value !== '')
-      );
-
-      // Example fetch API usage
-      const response = await fetch('/Update/your/details', {
+      const response = await api.put('/Update/your/details', formData, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+           Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
         },
-        body: JSON.stringify(userData)
       });
 
       if (!response.ok) {
