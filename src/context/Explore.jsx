@@ -47,7 +47,7 @@ const Users = () => {
           <input 
             type='text' 
             value={search} 
-            className='w-full p-4 pl-12 rounded-xl bg-gray-800 text-white border border-gray-700 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 focus:outline-none transition-all' 
+            className='w-full p-3 pl-12 rounded-xl bg-gray-800 text-white border border-gray-700 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 focus:outline-none transition-all' 
             placeholder='Search by username...' 
             onChange={(e) => setSearch(e.target.value)} 
           />
