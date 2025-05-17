@@ -94,9 +94,9 @@ const Users = () => {
                     >
                       <div className="relative">
                         <img 
-                          src="/api/placeholder/56/56" 
+                          src={user.image.imageUrl} 
                           className="rounded-full bg-yellow-600" 
-                          alt='' 
+                          alt={user.firstname}
                           width={56} 
                           height={56} 
                         />
