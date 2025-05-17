@@ -180,7 +180,7 @@ const UpdateUserProfile = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-900 p-4">
+    <div className="flex justify-center items-center w-full max-w-md mx-auto p-6 min-h-screen bg-gray-900 rounded-lg">
       <div className="w-full max-w-md bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-800 to-purple-800 px-6 py-4">
