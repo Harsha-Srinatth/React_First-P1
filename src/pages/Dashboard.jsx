@@ -20,7 +20,7 @@ const Dashboard = () => {
         </div>
         
         {/* Main Content Area */}
-        <section className="flex flex-1 overflow-y-auto pb-20 p-4 bg-black">
+        <section className="flex flex-1 overflow-y-auto p-2 bg-black">
           <Outlet />
         </section>
         
