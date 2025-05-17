@@ -15,12 +15,12 @@ const Dashboard = () => {
       {/* Main Content Container */}
       <div className="flex flex-1 flex-col min-h-screen">
         {/* Mobile Header - only visible on mobile/tablet */}
-        <div className="lg:hidden p-4 dark bg-black">
+        <div className="lg:hidden p-2 dark bg-black">
           <Header />
         </div>
         
         {/* Main Content Area */}
-        <section className="flex flex-1 overflow-y-auto pb-20 p-4 mt-2 dark bg-black">
+        <section className="flex flex-1 overflow-y-auto pb-20 p-4 bg-black">
           <Outlet />
         </section>
         

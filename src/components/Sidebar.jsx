@@ -78,14 +78,14 @@ const Sidebar = () => {
               <li key={link.route}>
                 <NavLink
                   to={link.route}
-                  className={`relative flex items-center p-2 rounded-xl transition-all duration-300 group ${isActive ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'hover:bg-neutral-800'}`}
+                  className={`relative flex items-center p-4 rounded-xl transition-all duration-300 group ${isActive ? 'bg-gradient-to-r from-blue-600 to-indigo-600' : 'hover:bg-neutral-800'}`}
                 >
                   <img
                     src={link.imageURL}
                     alt={link.label}
                     className={`w-7 h-7 mr-3 transition-all duration-300 ${isActive ? 'filter brightness-0 invert' : 'group-hover:scale-110'}`}
                   />
-                  <span className="text-base font-medium text-gray-300">{link.label}</span>
+                  <span className="text-base font-medium text-white">{link.label}</span>
                   {isActive && (
                     <span className="absolute -right-1 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-400 to-indigo-500 rounded-l"></span>
                   )}
