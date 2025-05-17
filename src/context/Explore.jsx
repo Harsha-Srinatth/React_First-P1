@@ -1,45 +1,32 @@
 import React, { useEffect, useState } from 'react';
 
+// Note: In your actual implementation, uncomment the following lines:
+import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
+
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   
-  // These functions simulate the behavior for demonstration purposes
-  const navigate = (path) => {
-    console.log(`Navigate to: ${path}`);
-    // In your actual code, you would use the navigate from react-router-dom
-  };
+  // Note: In your actual implementation, use this instead:
+  // const navigate = useNavigate();
+  const navigate = useNavigate();
   
-  const fetchUsers = (searchTerm) => {
-    setIsLoading(true);
-    // Simulate API call with timeout
-    setTimeout(() => {
-      // Sample data for demonstration
-      const sampleUsers = searchTerm ? [
-        {
-          _id: '1',
-          username: 'john' + searchTerm,
-          firstname: 'John',
-          image: { imageUrl: 'https://via.placeholder.com/56' }
-        },
-        {
-          _id: '2',
-          username: 'jane' + searchTerm,
-          firstname: 'Jane',
-          image: { imageUrl: 'https://via.placeholder.com/56' }
-        }
-      ] : [];
-      
-      setUsers(sampleUsers);
-      setIsLoading(false);
-    }, 500);
-  };
   
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       if (search?.trim()) {
-        fetchUsers(search);
+        setIsLoading(true);
+        api.get(`/explore/search?username=${search}`)
+          .then(response => {
+            setUsers(response.data);
+            setIsLoading(false);
+          })
+          .catch(error => {
+            console.error("Error when finding for users", error);
+            setIsLoading(false);
+          });
         console.log(users);
       } else {
         setUsers([]);
