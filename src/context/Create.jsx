@@ -76,7 +76,7 @@ const Create = () => {
 
   return (
     <div className='flex flex-col flex-1 p-2 md:p-4 gap-3 overflow-y-auto min-h-screen max-w-6xl mx-auto pb-20'>
-      <div className='rounded-lg bg-gradient-to-r from-indigo-900 to-purple-900 shadow-lg flex text-white w-full p-4 items-center justify-center gap-3 sticky top-0 z-10'>
+      <div className='rounded-lg bg-gradient-to-r from-indigo-900 to-purple-900 shadow-lg flex text-white w-full p-4 items-center justify-center gap-3 md:sticky top-0 z-10'>
         <img
           src="../imges/image-solid.svg"
           className='invert'
@@ -224,7 +224,7 @@ const Create = () => {
           </div>
         </div>
 
-        <div className='text-white font-bold flex flex-row justify-end items-center gap-4 py-6 sticky bottom-0 bg-black bg-opacity-70 backdrop-blur-sm mt-8 p-4 rounded-lg'>
+        <div className='text-white font-bold flex flex-row justify-end items-center gap-4 py-6 bottom-0 bg-black bg-opacity-70 backdrop-blur-sm mt-8 p-4 rounded-lg'>
           <button
             type="button"
             onClick={clearForm}
