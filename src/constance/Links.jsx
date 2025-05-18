@@ -30,7 +30,7 @@ export  const BottombarLinks = [
        route: '/'
     }, {
         imageURL : '../imges/magnifying-glass-solid.svg',
-        label: 'Reels',
+        label: 'Search',
         route: '/explore'
     }, {
         imageURL : '../imges/square-plus-solid.svg',

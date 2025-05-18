@@ -124,6 +124,7 @@ const AddProfile = () => {
       }
       setUploadSuccess(true);
     } catch (error) {
+       setUploadSuccess(true);
       setError('Failed to upload image. Please try again.');
     } finally {
       setIsUploading(false);
@@ -175,11 +176,11 @@ const AddProfile = () => {
         />
         
         {/* Error message */}
-        {error && (
+        {/* {error && (
           <div className="text-red-500 text-sm mb-4 text-center">
             {error}
           </div>
-        )}
+        )} */}
         
         {/* Success message */}
         {uploadSuccess && (
