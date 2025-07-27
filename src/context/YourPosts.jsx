@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import Likes from './Likes';
 import Comments from './Comments';
 import { MessageCircle, Trash2, X } from 'lucide-react'; // Added Trash2 and X icons
-
+import Cookies from 'js-cookie';  
 const YourPosts = () => {
   const [userposts, setUserposts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeComments, setActiveComments] = useState(null); // Added missing state
-  const token = localStorage.getItem('token');
+  const token = Cookies.get('token');
   
   useEffect(() => {
     const fetchUserPosts = async() => {
@@ -124,12 +124,19 @@ const YourPosts = () => {
               
               {/* Post Image */}
               {post.imageUrl && (
-                <div className="w-full">
+                <div className="w-full flex justify-center items-center bg-black rounded-md overflow-hidden" style={{ maxHeight: '70vh', minHeight: '200px' }}>
                   <img
-                    className="w-full object-cover transition-opacity duration-300 hover:opacity-95"
-                    style={{ maxHeight: "70vh" }}
                     src={post.imageUrl}
                     alt="Post"
+                    style={{
+                      maxWidth: '100%',
+                      maxHeight: '70vh',
+                      objectFit: 'contain',
+                      display: 'block',
+                      background: '#18181b',
+                      borderRadius: '0.5rem',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                    }}
                   />
                 </div>
               )}

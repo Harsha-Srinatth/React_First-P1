@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import api from '../services/api';
 import {useNavigate} from 'react-router-dom'
+import Cookies from 'js-cookie';
 
 const Login =() =>{
 
@@ -14,29 +15,39 @@ const navigate = useNavigate();
    }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userDetails = {email,password}    
-    try{
-    const response = await api.post("/login",
-     userDetails,console.log(userDetails),
-     {
-     headers:{
-         "Content-Type": "applicatiion/json"
-     }},
-   );
-    localStorage.setItem('token', response.data.token);
-    localStorage.setItem('user', JSON.stringify(response.data.user));
-    navigate('/');
-    
-    }catch(error){
-     if(error.response){
-       console.error("registration failed:", error.responce.data.message || "user is not registered");
-     }else if(error.request){
-       console.error('No responce from server');
-     }else {
-       console.log("Error:", error.message);
-   }
- }
-};
+    const userDetails = { email, password };
+    try {
+      const response = await api.post(
+        "/login",
+        userDetails,
+        {
+          headers: {
+            "Content-Type": "application/json" // <-- fixed typo
+          }
+        }
+      );
+      console.log(response.data.user);
+      setEmail("")
+      setPassword("")
+      Cookies.set('token', response.data.token, { expires: 1 }); // expires in 1 day
+      Cookies.set('user', JSON.stringify(response.data.user), { expires: 1 });
+      Cookies.set('userid', response.data.user.userid, { expires: 1 });
+      navigate('/');
+    } catch (error) {
+      if (error.response) {
+        // Show backend error message if available
+        const backendMsg = error.response.data?.message || "Login failed";
+        alert(backendMsg);
+        console.error("Login failed:", backendMsg);
+      } else if (error.request) {
+        alert("No response from server");
+        console.error('No response from server');
+      } else {
+        alert("An error occurred");
+        console.log("Error:", error.message);
+      }
+    }
+  };
   return(
   <>
     <div className='min-h-screen  flex  justify-center items-center bg-gradient-to-r from-cyan-500 to-blue-600 '>

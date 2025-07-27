@@ -12,7 +12,7 @@ const Likes = ({ postId, initialLikesCount, initiallyLiked }) => {
     
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const res = await api.post(`/${postId}/like`, {}, {
         headers: {
           Authorization: `Bearer ${token}`

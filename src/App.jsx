@@ -14,21 +14,14 @@ import ShowProfile from './context/ShowProfile';
 import AddProfile from './components/AddProfile';
 import ShowFollowers from './context/ShowFollowers';
 import ShowFollowing from './context/ShowFollowing';
+import Cookies from 'js-cookie';
 //import Likes from './context/Likes'
 //import { useEffect,useState } from 'react';
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
+  const token = Cookies.get('token');
   return token ? children : <Navigate to = '/login' />;
  
 };
-// const CombinedComponent = () => {
-//   return(
-//     <div className='flex bg-black'>
-//       <Dashboard/>
-//       <Home/>
-//     </div>
-//   )
-// }
 
 const  App = () => {
 

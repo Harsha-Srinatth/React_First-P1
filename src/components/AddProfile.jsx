@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import api from '../services/api';
-
+import Cookies from 'js-cookie';  
 const AddProfile = () => {
   const [profile, setProfile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
@@ -106,16 +106,13 @@ const AddProfile = () => {
       const formData = new FormData();
       formData.append("profilePhoto", compressedFile);
       
-      // Get token from localStorage (assuming you still need this)
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       
-      // Example fetch API usage instead of the imported api service
       const response = await  api.post('/upload-profile-img', formData, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
            "Content-Type": "multipart/form-data"
-          // Note: Don't set Content-Type when using FormData, browser will set it automatically with boundary
         },
       });
       

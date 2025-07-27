@@ -1,7 +1,8 @@
 import React from 'react';
-import { useNavigate,useParams } from 'react-router-dom';
-import { useState,useEffect } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import api from '../services/api'
+import Cookies from 'js-cookie';
 
 const ShowFollowers = () => {
 
@@ -9,8 +10,10 @@ const ShowFollowers = () => {
     const { userId } = useParams();
     console.log(userId,"user Id from params");
 
-    const [followers , setFollowers ] = useState([]);
-    const [loading,setLoading] = useState('');
+    const [followers, setFollowers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [removeLoading, setRemoveLoading] = useState({});
    
 
     useEffect(() => {
@@ -22,26 +25,29 @@ const ShowFollowers = () => {
         }
         const fetchData = async() => {
             try{
+                console.log('Fetching followers for userId:', userId);
                 const res = await api.get(`/followers-list/${userId}`);
+                console.log('API Response:', res);
 
                 if(res && res.data){
-                     if(Array.isArray(res.data)){
+                    console.log('Response data:', res.data);
+                    if(Array.isArray(res.data)){
                         setFollowers(res.data);
-                        console.log("setting following data from aray responce ",res.data)
+                        console.log("Setting followers from array response:", res.data);
                     }else if( res.data.followers && Array.isArray(res.data.followers)){
                         setFollowers(res.data.followers);
-                        console.log("setting following data from res.data.following",res.data.followers)
+                        console.log("Setting followers from res.data.followers:", res.data.followers);
                     }else{
-                        console.warn("Following data is not an Array:",res.data);
+                        console.warn("Followers data is not an Array:", res.data);
                         setFollowers([]);
                     }
                 }else{
-                    console.log("No data in rwsponce");
+                    console.log("No data in response");
                     setFollowers([]);
                 }
                  
             }catch(error){
-                console.error(error);
+                console.error('Error fetching followers:', error);
                 setFollowers([]);
             }finally{
               setLoading(false);
@@ -52,6 +58,32 @@ const ShowFollowers = () => {
         console.log(followers);
     },[userId, navigate]);
 
+    // Handle remove follower functionality
+    const handleRemoveFollower = async (followerToRemove) => {
+        try {
+            setRemoveLoading(prev => ({ ...prev, [followerToRemove.userId]: true }));
+            const token = Cookies.get('token');
+            
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+
+            const res = await api.post(`/remove-follower/${followerToRemove.userId}`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.status === 200) {
+                // Remove the user from the followers list
+                setFollowers(prev => prev.filter(user => user.userId !== followerToRemove.userId));
+            }
+        } catch (error) {
+            console.error('Error removing follower:', error);
+        } finally {
+            setRemoveLoading(prev => ({ ...prev, [followerToRemove.userId]: false }));
+        }
+    };
+
     if(loading) {
     return (
       <div className="flex items-center justify-center h-full w-full p-4">
@@ -60,40 +92,106 @@ const ShowFollowers = () => {
     );
   }
 
-    return(
-    <div className='text-white w-full'>
+    // Filter followers based on search term
+    const filteredFollowers = followers.filter(user =>
+        user.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.fullname?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-      <h1 className='flex flex-center font-bold text-3xl md:text-xl'>Followers List.!</h1>
-      <div className='flex flex-col'>
-        {/* <input type='text' value={search} className='w-full p-2 mt-1' placeholder='Search For Others You Want To Know..?' onChange={(e) => setSearch(e.target.value)} /> */}
-        {followers && followers.length > 0 ? (
-          <div className='flex flex-start p-5'>
-            <div className='flex flex-col gap-4 '>
-              {followers.map(user => (
-                <li key={user._id} >
-                  <div className='flex flex-row gap-3'>
-                   {user.image ?  <img src={ user.image } className='flex flex-row bg-yellow-600 rounded-full' alt='' width={56} height={56} /> : <div className='default-avatar'>{user.firstname?.[0] || '?'} </div> }
-                    <div className='flex flex-col gap-2'>
-                      <h1 className='text-lg text-2rem font-semibold '>{user.username}</h1>
-                      <p className='text-sm text-3rem'>{user.firstname}</p>
+    return(
+    <div className='text-white w-full min-h-screen bg-zinc-950 p-4'>
+      {/* Header */}
+      <div className='flex items-center justify-between mb-6'>
+        <div className='flex items-center gap-3'>
+          <button 
+            onClick={() => navigate(-1)}
+            className='p-2 hover:bg-gray-800 rounded-full transition-colors'
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h1 className='text-2xl md:text-3xl font-bold'>Followers</h1>
+        </div>
+        <span className='text-gray-400 text-sm'>{filteredFollowers.length} followers</span>
+      </div>
+
+      {/* Search Bar */}
+      <div className='mb-6'>
+        <div className='relative'>
+          <input 
+            type='text' 
+            value={searchTerm} 
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder='Search followers...' 
+            className='w-full p-3 pl-10 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors'
+          />
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Followers List */}
+      <div className='space-y-2'>
+        {filteredFollowers.length > 0 ? (
+          filteredFollowers.map(user => {
+            console.log('Follower object:', user);
+            return (
+              <div 
+                key={user.userId} 
+                className='block p-4 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors border border-gray-700'
+              >
+                <div className='flex items-center gap-4'>
+                  <Link to={`/profile?id=${user.userId}`} className='flex items-center gap-4 flex-1'>
+                    {user.image ? (
+                      <img 
+                        src={user.image} 
+                        className='w-12 h-12 rounded-full object-cover border-2 border-gray-600' 
+                        alt={user.fullname || 'profile'} 
+                      />
+                    ) : (
+                      <div className='w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg border-2 border-gray-600'>
+                        {user.fullname?.[0] || '?'}
+                      </div>
+                    )}
+                    <div className='flex-1'>
+                      <h2 className='text-lg font-semibold text-white'>{user.username}</h2>
+                      <p className='text-sm text-gray-400'>{user.fullname}</p>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                  <button
+                    onClick={() => handleRemoveFollower(user)}
+                    disabled={removeLoading[user.userId]}
+                    className='p-2 bg-gray-700 hover:bg-red-600 text-white rounded-lg transition-colors duration-200 flex items-center gap-1'
+                    title="Remove follower"
+                  >
+                    {removeLoading[user.userId] ? (
+                      <div className="h-3 w-3 border border-t-transparent border-white rounded-full animate-spin"></div>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        ) : searchTerm ? (
+          <div className='text-center py-12'>
+            <div className='text-gray-400 text-lg mb-2'>No followers found</div>
+            <p className='text-gray-500 text-sm'>Try adjusting your search terms</p>
           </div>
         ) : (
-          <div className='flex justify-center items-center h-screen'>
-            <div className='flex flex-col'>
-              <h1 className='text-yellow-600 font-semibold text-xl'>
-                No Followers Of user 
-              </h1>
-            </div>
-
+          <div className='text-center py-12'>
+            <div className='text-gray-400 text-lg mb-2'>No followers yet</div>
+            <p className='text-gray-500 text-sm'>When people follow this user, they'll appear here</p>
           </div>
-        )
-
-        }
+        )}
       </div>
     </div>
     )

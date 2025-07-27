@@ -55,7 +55,7 @@ const Posts = () => {
                   />
                 )}
                 <div className="ml-3">
-                  <p className="text-white font-semibold">{post.userId.username || "User"}</p>
+                  <p className="text-white font-semibold">{ "User"}</p>
                   <p className="text-gray-500 text-xs flex items-center">
                     <span> {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Just now"}</span>
                     {post.location && (
@@ -77,12 +77,19 @@ const Posts = () => {
 
               {/* Post Image */}
               {post.imageUrl && (
-                <div className="w-full">
+                <div className="w-full flex justify-center items-center bg-black rounded-md overflow-hidden" style={{ maxHeight: '70vh', minHeight: '200px' }}>
                   <img
-                    className="w-full object-cover"
-                    style={{ maxHeight: "70vh" }}
                     src={post.imageUrl}
                     alt="Post"
+                    style={{
+                      maxWidth: '100%',
+                      maxHeight: '70vh',
+                      objectFit: 'contain',
+                      display: 'block',
+                      background: '#18181b',
+                      borderRadius: '0.5rem',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                    }}
                   />
                 </div>
               )}

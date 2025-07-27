@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
-
+import Cookies from 'js-cookie';  
 const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState({});
@@ -18,12 +18,11 @@ const Profile = () => {
   useEffect(() => {
     const checkCurrentUser = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
+        const token = Cookies.get('token');
+        const currentUserId = Cookies.get('userid');
+        setUserId(currentUserId);
         
-        if (userId) {
-          setUserId(userId);
-          
+        if (currentUserId) {
           // If viewing your own profile
           if (window.location.pathname === '/profile') {
             setIsCurrentUser(true);
@@ -32,13 +31,9 @@ const Profile = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const profileId = urlParams.get('id');
             
-            if (profileId && profileId !== userId) {
+            if (profileId && profileId !== currentUserId) {
               setIsCurrentUser(false);
-              // Fetch if we're following this user
-              const followStatusRes = await api.get(`/check-follow-status/${profileId}`, {
-                headers: { Authorization: `Bearer ${token}` }
-              });
-              setIsFollowing(followStatusRes.data.isFollowing);
+              // The follow status will be fetched with the user details
             } else {
               setIsCurrentUser(true);
             }
@@ -57,7 +52,7 @@ const Profile = () => {
     const fetchDetails = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('token');
         if (!token) return;
         
         // Endpoint might change based on whether viewing own profile or another user's
@@ -87,7 +82,7 @@ const Profile = () => {
   const handleFollowToggle = async () => {
     try {
       setFollowLoading(true);
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const profileId = window.location.search.split('=')[1];
       
       if (!profileId || !token) return;
@@ -97,9 +92,31 @@ const Profile = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      if (res.data.success) {
-        setIsFollowing(!isFollowing);
+      // Update local state with response data
+      if (res.data.followersCount !== undefined) {
+        setFollowers(res.data.followersCount);
+      } else if (res.data.FollowersCount !== undefined) {
+        setFollowers(res.data.FollowersCount);
+      } else {
         setFollowers(isFollowing ? followers - 1 : followers + 1);
+      }
+      
+      setIsFollowing(!isFollowing);
+      
+      // Refresh user data to ensure consistency
+      const userRes = await api.get(`/user/${profileId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (userRes.data) {
+        setDetails(prev => ({
+          ...prev,
+          followers: userRes.data.followers || prev.followers,
+          following: userRes.data.following || prev.following
+        }));
+        setFollowers(userRes.data.FollowersCount || followers);
+        setFollowing(userRes.data.FollowingCount || following);
+        setIsFollowing(userRes.data.isFollowing);
       }
     } catch (err) {
       console.error("Error toggling follow status:", err);
@@ -119,6 +136,8 @@ const Profile = () => {
       </div>
     );
   }
+
+  console.log('Profile details object:', details);
 
   return (
     <div className="w-full bg-gray-900 text-gray-100 overflow-y-auto pb-16 md:pb-0 min-h-screen">
@@ -146,15 +165,20 @@ const Profile = () => {
             {/* Profile image */}
             <div className="flex-shrink-0 -mt-16 sm:-mt-20 md:-mt-24 mb-4 sm:mb-0">
               <div className="rounded-full border-4 border-gray-800 shadow-lg h-28 w-28 md:h-36 md:w-36 overflow-hidden relative group">
-                <img 
-                  className="h-full w-full object-cover bg-gray-700"
-                  src={image || "https://via.placeholder.com/150?text=User"}
-                  alt={details.username || "User"}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://via.placeholder.com/150?text=User";
-                  }}
-                />
+              {image ? (
+                  <img
+                    src={image}
+                    alt= "profile"
+                    className="w-full h-full object-cover rounded-full transition-all duration-300"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                    }}
+                  />
+                ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-2xl md:text-3xl transition-all duration-300 rounded-full">
+                    {details.fullname[0]}
+                  </div>
+                )}
                 {isCurrentUser && (
                   <Link to='/upload-profile-img' className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200">
                     <div className="bg-blue-600 p-2 rounded-full">
@@ -174,9 +198,9 @@ const Profile = () => {
                 <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white tracking-tight">
                   {details.username}
                 </h1>
-                {details.firstname && (
+                {details.fullname && (
                   <p className="text-sm md:text-base text-gray-400 mt-1">
-                    {details.firstname}
+                    {details.fullname}
                   </p>
                 )}
               </div>
@@ -186,7 +210,7 @@ const Profile = () => {
                 {isCurrentUser ? (
                   <Link 
                     to='/user/edit/profile' 
-                    className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition duration-200 flex items-center space-x-2 border border-gray-600"
+                    className="px-5 py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-full shadow font-semibold transition-all duration-200 flex items-center space-x-2 border-none focus:outline-none focus:ring-2 focus:ring-blue-400"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -197,10 +221,10 @@ const Profile = () => {
                   <button 
                     onClick={handleFollowToggle}
                     disabled={followLoading}
-                    className={`px-4 py-2 rounded-lg transition duration-200 flex items-center space-x-2 font-medium ${
+                    className={`px-5 py-2 rounded-full shadow font-semibold transition-all duration-200 flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
                       isFollowing 
-                        ? 'bg-gray-700 hover:bg-gray-600 text-white border border-gray-500' 
-                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                        ? 'bg-gray-700 hover:bg-gray-600 text-white' 
+                        : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white'
                     }`}
                   >
                     {followLoading ? (
@@ -223,7 +247,9 @@ const Profile = () => {
                 {!isCurrentUser && (
                   <button className="p-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition border border-gray-600">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <circle cx="8" cy="12" r="1.5" fill="currentColor" />
+                      <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                      <circle cx="16" cy="12" r="1.5" fill="currentColor" />
                     </svg>
                   </button>
                 )}
@@ -231,30 +257,48 @@ const Profile = () => {
             </div>
           </div>
           
-          {/* Bio */}
-          <div className="mt-6 text-gray-300 bg-gray-800 rounded-lg p-4 border border-gray-700">
-            <p className="text-sm md:text-base whitespace-pre-line">{details.bio || "No bio available."}</p>
-          </div>
-          
-          {/* Stats */}
-          <div className="flex justify-around mt-6 py-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="text-center px-4">
-              <span className="block font-bold text-white text-lg md:text-xl">0</span>
-              <span className="text-xs md:text-sm text-gray-400">Posts</span>
+          {/* Stats - Minimal modern look */}
+          <div className="flex justify-center gap-10 mt-6 select-none">
+            <div className="flex flex-col items-center">
+              <span className="font-bold text-xl md:text-2xl text-gray-100 tracking-tight">0</span>
+              <span className="text-xs md:text-sm text-gray-400 mt-1 uppercase tracking-wider">Posts</span>
             </div>
-            <div className="text-center px-4 border-l border-r border-gray-700">
-              <span className="block font-bold text-white text-lg md:text-xl">{followers}</span>
-              <Link to={`/list-followers/${details._id}`} className="text-xs md:text-sm text-gray-400 hover:text-blue-400 transition">
+            <div className="flex flex-col items-center">
+              <span className="font-bold text-xl md:text-2xl text-gray-100 tracking-tight">{followers}</span>
+              <Link to={`/list-followers/${details.userid}`} className="text-xs md:text-sm text-gray-300 hover:font-bold font-semibold mt-1 transition-colors uppercase tracking-wider focus:outline-none">
                 Followers
               </Link>
             </div>
-            <div className="text-center px-4">
-              <span className="block font-bold text-white text-lg md:text-xl">{following}</span>
-              <Link to={`/list-following/${details._id}`} className="text-xs md:text-sm text-gray-400 hover:text-blue-400 transition">
+            <div className="flex flex-col items-center">
+              <span className="font-bold text-xl md:text-2xl text-gray-100 tracking-tight">{following}</span>
+              <Link to={`/list-following/${details.userid}`} className="text-xs md:text-sm text-gray-300 hover:font-bold font-semibold mt-1 transition-colors uppercase tracking-wider focus:outline-none">
                 Following
               </Link>
             </div>
           </div>
+
+          {/* Bio (remains below stats) */}
+          {details.bio ? (
+            <div className="mt-6 text-gray-100 bg-gradient-to-r from-blue-800 via-purple-800 to-blue-900 rounded-xl p-5 border border-blue-700 shadow-lg flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-300 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              <p className="text-base md:text-lg font-medium whitespace-pre-line">{details.bio}</p>
+            </div>
+          ) : (
+            <div className="mt-6 flex items-center justify-center">
+              <div className="w-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 border-2 border-dashed border-blue-400 flex flex-col items-center shadow-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                <p className="text-white font-bold text-lg md:text-xl mb-1">Add your bio here</p>
+                <p className="text-blue-100 text-sm md:text-base text-center">Let others know more about you! Click edit profile to add a bio.</p>
+                {isCurrentUser && (
+                  <Link to='/user/edit/profile' className="mt-4 px-5 py-2 bg-white text-blue-700 font-semibold rounded-lg shadow hover:bg-blue-50 transition-all duration-200">Add Bio..</Link>
+                )}
+              </div>
+            </div>
+          )}
         </div>
         
         {/* Tabs */}
@@ -306,7 +350,7 @@ const Profile = () => {
               <p className="text-sm md:text-base mt-2 text-gray-400">When {isCurrentUser ? 'you share' : 'this user shares'} posts, they'll appear here.</p>
               
               {isCurrentUser && (
-                <button className="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200">
+                <button className="mt-6 px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-full shadow font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
                   Create Post
                 </button>
               )}

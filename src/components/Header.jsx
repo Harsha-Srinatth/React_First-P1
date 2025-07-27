@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { Menu } from 'lucide-react';
-
+import Cookies from 'js-cookie';              
 const Header = ({ toggleSidebar }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -25,11 +25,11 @@ const Header = ({ toggleSidebar }) => {
 
   // Get username from token
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('token');
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setUsername(decoded.username);
+        setUsername(decoded.username);  
       } catch (error) {
         console.error("Invalid token:", error);
       }
@@ -58,12 +58,10 @@ const Header = ({ toggleSidebar }) => {
 
   // Handle logout
   const handleLogout = () => {
-    if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+    if (typeof window !== "undefined" && typeof Cookies !== "undefined") {
+        Cookies.remove('token');
+        Cookies.remove('user');
       navigate('/login');
-    } else {
-      console.error("localStorage is not available.");
     }
   };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import api from '../services/api';
-
+import Cookies from 'js-cookie';
 const Create = () => {
   const [caption, setCaption] = useState('');
   const [location, setLocation] = useState('');
@@ -48,7 +48,7 @@ const Create = () => {
     }
     
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const { data } = await api.post("/create-post",
         formdata,
         {

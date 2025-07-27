@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import api from '../services/api'
-
+import Cookies from 'js-cookie';
 const UpdateUserProfile = () => {
   const [username, setUsername] = useState('');
-  const [firstname, setFirstname] = useState('');
+  const [fullname, setFullname] = useState('');
   const [profile, setProfile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
@@ -94,7 +94,7 @@ const UpdateUserProfile = () => {
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     
-    if (!username && !firstname) {
+    if (!username && !fullname) {
       setError('Please fill at least one field to update');
       return;
     }
@@ -108,10 +108,10 @@ const UpdateUserProfile = () => {
       
       const formData = new FormData();
       formData.append("profilePhoto", compressedFile);
-      formData.append('firstname',firstname);
+      formData.append('fullname',fullname);
       formData.append('username',username);
       
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const response = await api.put('/Update/your/details', formData, {
         method: 'PUT',
         headers: {
@@ -232,8 +232,8 @@ const UpdateUserProfile = () => {
               <label className="block text-gray-300 text-sm font-medium">Name</label>
               <input 
                 type="text" 
-                value={firstname}
-                onChange={(e) => setFirstname(e.target.value)} 
+                value={fullname}
+                onChange={(e) => setFullname(e.target.value)} 
                 placeholder="New Name" 
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 focus:border-blue-500"

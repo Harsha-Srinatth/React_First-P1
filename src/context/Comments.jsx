@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { Send, Trash2, X } from 'lucide-react';
-
+import Cookies from 'js-cookie';
 const Comments = ({ postId, Count, comment, userId, onClose }) => {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState('');
@@ -34,7 +34,7 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
     
     setIsSubmitting(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const res = await api.post(`/${postId}/comment`, 
         { text },
         {
@@ -63,7 +63,7 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
     }
     
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token') ;
       await api.delete(`/comments/${commentId}`, {
         data: { postId },
         headers: {
