@@ -41,7 +41,7 @@ const  App = () => {
               <Route path="/explore" element={<Explore />} />
               <Route path="/create-post" element={<Create/>} /> 
               <Route path="/upload-profile-img" element={<AddProfile />} />
-              <Route path="/user/posts" element = {<YourPosts/>} />
+              <Route path="/user/posts/user_posts" element = {<YourPosts />} />
               <Route path="/user/profile" element={<Profile />} />
               <Route path="/user/edit/profile"  element={ <UpdateUserProfile />}/>
               <Route path="/user/:userId" element={<ShowProfile />}/>  

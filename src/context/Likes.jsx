@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import api from '../services/api';
+import Cookies from 'js-cookie';
 
 const Likes = ({ postId, initialLikesCount, initiallyLiked }) => {
   const [likesCount, setLikesCount] = useState(initialLikesCount || 0);

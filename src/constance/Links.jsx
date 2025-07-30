@@ -15,7 +15,7 @@
     },{
         imageURL : '../imges/image-solid.svg',
         label: 'Your Posts',
-        route: '/user/posts'
+        route: '/user/posts/user_posts'
     },{
         imageURL: '../imges/circle-user-solid.svg',
         label: 'Profile',

@@ -5,6 +5,7 @@ import Likes from './Likes';
 import Comments from './Comments';
 import { MessageCircle, Trash2, X } from 'lucide-react'; // Added Trash2 and X icons
 import Cookies from 'js-cookie';  
+import DynamicAspectImage from '../components/DynamicAspectImage';
 const YourPosts = () => {
   const [userposts, setUserposts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +15,7 @@ const YourPosts = () => {
   useEffect(() => {
     const fetchUserPosts = async() => {
       try {
-        const res = await api.get('/user/posts', {
+        const res = await api.get('/user/posts/user_posts', {
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -38,10 +39,10 @@ const YourPosts = () => {
     
     try {
       // Optimistically update UI first
-      setUserposts(prevPosts => prevPosts.filter(post => post._id !== postId));
+      setUserposts(prevPosts => prevPosts.filter(post => post.postId !== postId));
       
       // Then make API call
-      await api.delete(`/posts/${postId}`, {
+      await api.delete(`/user/posts/user_posts/${postId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -51,7 +52,7 @@ const YourPosts = () => {
     } catch(error) {
       console.error("Error deleting post:", error);
       // If deletion fails, revert the UI change by fetching posts again
-      const res = await api.get('/user/posts', {
+      const res = await api.get('/user/posts/user_posts', {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -107,7 +108,7 @@ const YourPosts = () => {
                 
                 {/* Delete Button */}
                 <button 
-                  onClick={() => deletePost(post._id)}
+                  onClick={() => deletePost(post.postId)}
                   className="text-gray-400 hover:text-red-500 transition-colors duration-300 p-2 rounded-full hover:bg-gray-800"
                   aria-label="Delete post"
                 >
@@ -123,23 +124,8 @@ const YourPosts = () => {
               )}
               
               {/* Post Image */}
-              {post.imageUrl && (
-                <div className="w-full flex justify-center items-center bg-black rounded-md overflow-hidden" style={{ maxHeight: '70vh', minHeight: '200px' }}>
-                  <img
-                    src={post.imageUrl}
-                    alt="Post"
-                    style={{
-                      maxWidth: '100%',
-                      maxHeight: '70vh',
-                      objectFit: 'contain',
-                      display: 'block',
-                      background: '#18181b',
-                      borderRadius: '0.5rem',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                    }}
-                  />
-                </div>
-              )}
+             <DynamicAspectImage src={post.imageUrl} alt="Post" />
+             
               
               {/* Tags */}
               {post.tags && (
@@ -153,7 +139,7 @@ const YourPosts = () => {
                 <div className="flex gap-6">
                   {/* Likes */}
                   <Likes
-                    postId={post._id}
+                    postId={post.postId}
                     initialLikesCount={post.likes?.length || 0}
                     initiallyLiked={post.likedByUser}
                   />
@@ -161,11 +147,11 @@ const YourPosts = () => {
                   {/* Comments Button */}
                   <button 
                     className="flex items-center gap-1 text-white focus:outline-none"
-                    onClick={() => toggleComments(post._id)}
+                    onClick={() => toggleComments(post.postId)}
                   >
                     <MessageCircle 
                       className={`transition-colors duration-300 ${
-                        activeComments === post._id ? 'text-purple-500' : 'text-white hover:text-purple-300'
+                        activeComments === post.postId ? 'text-purple-500' : 'text-white hover:text-purple-300'
                       }`} 
                       size={20} 
                     />
@@ -176,7 +162,7 @@ const YourPosts = () => {
             </div>
             
             {/* Separate Comments Modal */}
-            {activeComments === post._id && (
+            {activeComments === post.postId && (
               <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
                 <div className="w-full max-w-lg max-h-[90vh] flex flex-col bg-gray-900 rounded-xl border border-gray-700">
                   <div className="relative w-full p-4 border-b border-gray-800 flex justify-between items-center">
@@ -192,10 +178,10 @@ const YourPosts = () => {
                   
                   <div className="p-4 overflow-y-auto">
                     <Comments
-                      postId={post._id}
+                      postId={post.postId}
                       Count={post.comments?.length || 0}
                       comment={post.comments}
-                      userId={post.userId}
+                      userId={post.userid}
                       onClose={() => setActiveComments(null)}
                     />
                   </div>

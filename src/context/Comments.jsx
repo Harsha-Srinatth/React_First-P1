@@ -15,7 +15,9 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
       try {
         setIsLoading(true);
         const res = await api.get(`/${postId}/comments`);
-        setComments(res.data);
+        setComments(res.data.comments || res.data);
+        setCount(res.data.count || (res.data.comments ? res.data.comments.length : res.data.length));
+        console.log(res.data)
       } catch (error) {
         console.error("Error fetching comments:", error);
         // If API call fails, fallback to provided comments
@@ -71,8 +73,8 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
         }
       });
       
-      setComments(prev => prev.filter(comment => comment._id !== commentId));
-      // Update count correctly
+      setComments(prev => prev.filter(comment => comment.commentId !== commentId));
+    
       setCount(prevCount => prevCount - 1);
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -101,24 +103,41 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
         ) : comments.length > 0 ? (
           <div className="mb-4 max-h-72 overflow-y-auto">
             {comments.map((comment, index) => (
-              <div key={comment._id || index} className="mb-3 bg-gray-800 bg-opacity-80 p-3 rounded-lg border border-gray-700">
+              <div key={comment.commentId || index} className="mb-3 bg-gray-800 bg-opacity-80 p-3 rounded-lg border border-gray-700">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start">
-                    {/* Space for user profile picture */}
-                    <div className="w-8 h-8 rounded-full bg-gray-700 mr-3 flex-shrink-0"></div>
+                    {/* User profile picture */}
+                    <div className="w-8 h-8 rounded-full mr-3 flex-shrink-0 overflow-hidden">
+                      {comment.userimage ? (
+                        <img 
+                          src={comment.userimage} 
+                          alt={comment.username || "User"} 
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'block';
+                          }}
+                        />
+                      ) : null}
+                      <div className={`w-full h-full bg-gray-700 flex items-center justify-center ${comment.userimage ? 'hidden' : ''}`}>
+                        <span className="text-gray-400 text-xs font-medium">
+                          {comment.username ? comment.username.charAt(0).toUpperCase() : 'U'}
+                        </span>
+                      </div>
+                    </div>
                     <div className="flex-1">
                       <p className="text-purple-300 text-sm font-medium mb-1">
-                        {comment.user?.username || "User"}
+                        {comment.username || "User"}
                       </p>
-                      <p className="text-white">{comment.text}</p>
+                      <p className="text-white">{comment.comment}</p>
                       <p className="text-gray-400 text-xs mt-1">
                         {comment.createdAt ? new Date(comment.createdAt).toLocaleDateString() : "Just now"}
                       </p>
                     </div>
                   </div>
-                  {comment.user?._id === userId && (
+                  {comment.userid === userId && (
                     <button 
-                      onClick={() => deleteComment(comment._id)}
+                      onClick={() => deleteComment(comment.commentId)}
                       className="text-gray-400 hover:text-red-500 transition-colors p-1 ml-2"
                     >
                       <Trash2 size={16} />

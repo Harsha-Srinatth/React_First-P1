@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { MessageCircle } from 'lucide-react';
 import Likes from './Likes';
 import Comments from './Comments';
+import DynamicAspectImage from '../components/DynamicAspectImage';
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -55,7 +56,7 @@ const Posts = () => {
                   />
                 )}
                 <div className="ml-3">
-                  <p className="text-white font-semibold">{ "User"}</p>
+                  <p className="text-white font-semibold">{post.username}</p>
                   <p className="text-gray-500 text-xs flex items-center">
                     <span> {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Just now"}</span>
                     {post.location && (
@@ -77,21 +78,7 @@ const Posts = () => {
 
               {/* Post Image */}
               {post.imageUrl && (
-                <div className="w-full flex justify-center items-center bg-black rounded-md overflow-hidden" style={{ maxHeight: '70vh', minHeight: '200px' }}>
-                  <img
-                    src={post.imageUrl}
-                    alt="Post"
-                    style={{
-                      maxWidth: '100%',
-                      maxHeight: '70vh',
-                      objectFit: 'contain',
-                      display: 'block',
-                      background: '#18181b',
-                      borderRadius: '0.5rem',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                    }}
-                  />
-                </div>
+                <DynamicAspectImage src={post.imageUrl} alt="Post" />
               )}
 
               {/* Tags */}
@@ -106,7 +93,7 @@ const Posts = () => {
                 <div className="flex gap-6">
                   {/* Likes */}
                   <Likes
-                    postId={post._id}
+                    postId={post.postId}
                     initialLikesCount={post.likes?.length || 0}
                     initiallyLiked={post.likedByUser}
                   />
@@ -114,11 +101,11 @@ const Posts = () => {
                   {/* Comments Button */}
                   <button 
                     className="flex items-center gap-1 text-white focus:outline-none"
-                    onClick={() => toggleComments(post._id)}
+                    onClick={() => toggleComments(post.postId)}
                   >
                     <MessageCircle 
                       className={`transition-colors duration-300 ${
-                        activeComments === post._id ? 'text-purple-500' : 'text-white hover:text-purple-300'
+                        activeComments === post.postId ? 'text-purple-500' : 'text-white hover:text-purple-300'
                       }`} 
                       size={20} 
                     />
@@ -129,7 +116,7 @@ const Posts = () => {
             </div>
 
             {/* Separate Comments Modal */}
-            {activeComments === post._id && (
+            {activeComments === post.postId && (
               <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
                 <div className="w-full max-w-lg max-h-[90vh] flex flex-col">
                   <div className="relative w-full">
@@ -141,10 +128,10 @@ const Posts = () => {
                     </button>
                     
                     <Comments
-                      postId={post._id}
+                      postId={post.postId}
                       Count={post.comments?.length || 0}
                       comment={post.comments}
-                      userId={post.userId}
+                      userId={post.userid}
                       onClose={() => setActiveComments(null)}
                     />
                   </div>
