@@ -5,17 +5,20 @@ import { MessageCircle } from 'lucide-react';
 import Likes from './Likes';
 import Comments from './Comments';
 import DynamicAspectImage from '../components/DynamicAspectImage';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom'
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeComments, setActiveComments] = useState(null);
+  const userid = Cookies.get('userid')?.replace(/^"|"$/g,'')  ;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await api.get('/post');
-        console.log("raw response", res);
         setPosts(res.data);
       } catch (error) {
         console.log(error);
@@ -30,6 +33,10 @@ const Posts = () => {
   const toggleComments = (postId) => {
     setActiveComments(activeComments === postId ? null : postId);
   };
+
+  const goToProfile = (userId) => {
+    navigate(`/user/${userId}`);
+  }
 
   if (loading) {
     return (
@@ -50,13 +57,14 @@ const Posts = () => {
               <div className="flex items-center px-4 py-3">
                 {post.user.imageUrl && (
                   <img
-                    className="w-10 h-10 rounded-full object-cover border border-gray-700"
+                    className="w-10 h-10 rounded-full object-cover cursor-pointer border border-gray-700"
                     src={post.user.imageUrl}
+                    onClick= {() => goToProfile(post.userid)}
                     alt="Profile"
                   />
                 )}
                 <div className="ml-3">
-                  <p className="text-white font-semibold">{post.username}</p>
+                  <p className="text-white font-semibold cursor-pointer"  onClick= {() => goToProfile(post.userid)}>{post.username}</p>
                   <p className="text-gray-500 text-xs flex items-center">
                     <span> {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Just now"}</span>
                     {post.location && (
@@ -72,7 +80,7 @@ const Posts = () => {
               {/* Post Caption */}
               {post.caption && (
                 <div className="px-4 py-2 text-white">
-                  <p>{post.caption}</p>
+                  <p className="cursor-pointer">{post.caption}</p>
                 </div>
               )}
 
@@ -95,7 +103,7 @@ const Posts = () => {
                   <Likes
                     postId={post.postId}
                     initialLikesCount={post.likes?.length || 0}
-                    initiallyLiked={post.likedByUser}
+                    initiallyLiked={post.likes.includes(userid)}
                   />
                   
                   {/* Comments Button */}
@@ -132,6 +140,7 @@ const Posts = () => {
                       Count={post.comments?.length || 0}
                       comment={post.comments}
                       userId={post.userid}
+                      userid = {userid}
                       onClose={() => setActiveComments(null)}
                     />
                   </div>

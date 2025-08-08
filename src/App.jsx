@@ -15,8 +15,8 @@ import AddProfile from './components/AddProfile';
 import ShowFollowers from './context/ShowFollowers';
 import ShowFollowing from './context/ShowFollowing';
 import Cookies from 'js-cookie';
-//import Likes from './context/Likes'
-//import { useEffect,useState } from 'react';
+import Settings from './context/Settings';
+import About from './pages/About';
 const ProtectedRoute = ({ children }) => {
   const token = Cookies.get('token');
   return token ? children : <Navigate to = '/login' />;
@@ -46,7 +46,9 @@ const  App = () => {
               <Route path="/user/edit/profile"  element={ <UpdateUserProfile />}/>
               <Route path="/user/:userId" element={<ShowProfile />}/>  
               <Route path="/list-followers/:userId" element={ <ShowFollowers />} /> 
-              <Route path="/list-following/:userId" element= { <ShowFollowing />} />     
+              <Route path="/list-following/:userId" element= { <ShowFollowing />} />
+              <Route path="/settings" element={ <Settings /> }  />   
+              <Route path="/about" element={<About />} />
           </Route>
           
                 

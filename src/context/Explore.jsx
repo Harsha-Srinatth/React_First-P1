@@ -34,7 +34,6 @@ const Users = () => {
             console.error("Error when finding for users", error);
             setIsLoading(false);
           });
-        console.log(users);
       } else {
         setUsers([]);
       }
@@ -47,7 +46,7 @@ const Users = () => {
   }
     
   return (
-    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900 min-h-screen w-full p-4 md:p-8 font-sans">
+    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-slate-900 min-h-screen w-full p-4 md:p-8 font-sans pt-20 pb-24">
       <div className="max-w-2xl mx-auto">
         <h1 className="font-extrabold text-4xl md:text-3xl text-center mb-8 text-blue-400 tracking-wide drop-shadow-sm" style={{letterSpacing: '0.02em'}}>Users List</h1>
         <div className="w-full mx-auto mb-8">

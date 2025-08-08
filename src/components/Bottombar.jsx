@@ -7,7 +7,7 @@ const Bottombar = () => {
   const { pathname } = location;
   
   return (
-    <div className="md:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[94%] text-white flex justify-around bg-gray-900 px-2 py-2 rounded-xl shadow-lg border border-gray-800 z-50">
+    <div className="md:hidden fixed bottom-0 left-0 w-full h-16 text-white flex justify-around bg-gray-900 px-2 py-2 rounded-t-xl shadow-lg border-t border-gray-800 z-50">
       <div className="w-full flex justify-around items-center">
         {BottombarLinks.map((link) => {
           const isActive = pathname === link.route;

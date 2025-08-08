@@ -2,6 +2,7 @@ import React from 'react';
 import { useState  } from 'react';
 import {useNavigate} from 'react-router-dom'
 import api from '../services/api';
+import Swal from 'sweetalert2';
 //import {Link} from 'react-router-dom'
 
 const Example = () =>{
@@ -16,11 +17,43 @@ const navigate = useNavigate();
   
   const handleSubmit = async (e) => {
      e.preventDefault();
-     try {
+
+  // Validation
+  const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+  if (!specialCharRegex.test(username)) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Invalid Username',
+      text: 'Username must contain at least one special character.'
+    });
+    return;
+  }
+  if (password.length < 6) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Invalid Password',
+      text: 'Password must be at least 6 characters long.'
+    });
+    return;
+  }
+  if (!fullname || fullname[0] !== fullname[0].toUpperCase()) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Invalid Fullname',
+      text: 'Fullname must start with an uppercase letter.'
+    });
+    return;
+  }
+
+  // Transform values
+  const transformedFullname = fullname[0].toUpperCase() + fullname.slice(1);
+  const transformedUserid = userid.toUpperCase();
+
+  try {
     const response = await api.post('/register', {
-      fullname,
+      fullname: transformedFullname,
       username,
-      userid,
+      userid: transformedUserid,
       email,
       password,
     });
@@ -30,17 +63,26 @@ const navigate = useNavigate();
     setUserid("")
     setEmail("")
     setPassword("")
-    alert('Registered successfully');
+    Swal.fire({
+      icon: 'success',
+      title: 'Registered successfully',
+      showConfirmButton: false,
+      timer: 1500
+    });
     navigate('/login')
   } catch (error) {
     if (error.response) {
-      // Backend responded with an error
-      console.log('Backend error:', error.response.data);
-      alert(error.response.data.message || 'Registration failed');
+      Swal.fire({
+        icon: 'error',
+        title: 'Registration failed',
+        text: error.response.data.message || 'Registration failed'
+      });
     } else {
-      // Network or other error
-      console.log('Error:', error.message);
-      alert('An error occurred');
+      Swal.fire({
+        icon: 'error',
+        title: 'An error occurred',
+        text: error.message
+      });
     }
   }
 };
@@ -50,8 +92,8 @@ const navigateTo = () => {
   
 return(
  <div>  
-     <div className='min-h-screen  flex  justify-center items-center bg-gradient-to-r from-cyan-500 to-blue-600 '>
-        <div className ="shadow-md w-full max-w-md rounded-xl bg-white p-7" >
+     <div className='min-h-screen p-2 flex  justify-center items-center bg-gradient-to-r from-cyan-500 to-blue-600 '>
+        <div className ="shadow-md w-full max-w-md rounded-xl bg-white p-6" >
           <h1 className='text-2xl font-bold text-center text-black'>Register</h1>
           <form onSubmit ={handleSubmit} action ="/register" className='mt-6'>
             <div className='mx-4 items-center '>

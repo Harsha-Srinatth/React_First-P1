@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { Send, Trash2, X } from 'lucide-react';
 import Cookies from 'js-cookie';
-const Comments = ({ postId, Count, comment, userId, onClose }) => {
+const Comments = ({ postId, Count, comment, userId, userid, onClose }) => {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState('');
   const [count, setCount] = useState(Count || 0);
@@ -17,7 +17,6 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
         const res = await api.get(`/${postId}/comments`);
         setComments(res.data.comments || res.data);
         setCount(res.data.count || (res.data.comments ? res.data.comments.length : res.data.length));
-        console.log(res.data)
       } catch (error) {
         console.error("Error fetching comments:", error);
         // If API call fails, fallback to provided comments
@@ -74,7 +73,6 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
       });
       
       setComments(prev => prev.filter(comment => comment.commentId !== commentId));
-    
       setCount(prevCount => prevCount - 1);
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -104,6 +102,7 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
           <div className="mb-4 max-h-72 overflow-y-auto">
             {comments.map((comment, index) => (
               <div key={comment.commentId || index} className="mb-3 bg-gray-800 bg-opacity-80 p-3 rounded-lg border border-gray-700">
+                
                 <div className="flex items-start justify-between">
                   <div className="flex items-start">
                     {/* User profile picture */}
@@ -135,7 +134,7 @@ const Comments = ({ postId, Count, comment, userId, onClose }) => {
                       </p>
                     </div>
                   </div>
-                  {comment.userid === userId && (
+                  {comment.userid === userid?.replace(/^"|"$/g, '') && (
                     <button 
                       onClick={() => deleteComment(comment.commentId)}
                       className="text-gray-400 hover:text-red-500 transition-colors p-1 ml-2"

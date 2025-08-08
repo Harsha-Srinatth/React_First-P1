@@ -7,6 +7,7 @@ const Likes = ({ postId, initialLikesCount, initiallyLiked }) => {
   const [likesCount, setLikesCount] = useState(initialLikesCount || 0);
   const [liked, setLiked] = useState(initiallyLiked || false);
   const [isLoading, setIsLoading] = useState(false);
+  const [userAlreadyLiked, setUserAlreadyLiked] = useState(initiallyLiked || false);
 
   const handleLike = async () => {
     if (isLoading) return;
@@ -19,12 +20,9 @@ const Likes = ({ postId, initialLikesCount, initiallyLiked }) => {
           Authorization: `Bearer ${token}`
         }
       });
-      
       setLikesCount(res.data.likesCount);
       setLiked(res.data.likedByUser);
-      
-      console.log(res.data.likedByUser);
-      console.log(res.data.likesCount);
+      setUserAlreadyLiked(res.data.userAlreadyLiked);
     } catch (error) {
       console.error("Error toggling like:", error);
     } finally {
@@ -33,8 +31,8 @@ const Likes = ({ postId, initialLikesCount, initiallyLiked }) => {
   };
 
   useEffect(() => {
-    console.log("Updated Likes Count ", likesCount);
-  }, [likesCount]);
+    setLiked(userAlreadyLiked);
+  }, [userAlreadyLiked]);
 
   return (
     <button 
@@ -46,7 +44,7 @@ const Likes = ({ postId, initialLikesCount, initiallyLiked }) => {
         className={`transition-all duration-300 transform ${
           isLoading ? 'animate-pulse' : ''
         } ${
-          liked 
+          liked
             ? 'fill-red-500 text-red-500 scale-110' 
             : 'text-white hover:scale-110'
         }`} 

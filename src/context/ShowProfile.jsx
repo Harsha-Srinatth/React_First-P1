@@ -11,21 +11,16 @@ const ShowProfile = () => {
   const [followers, setFollowers] = useState('');
   const [isFollowing, setIsFollowing] = useState(false); 
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('posts');
   const [image,setImage] = useState('');
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [currentUserId, setCurrentUserId] = useState('');
-  const [followersList, setFollowersList] = useState([]);
-  const [followingList, setFollowingList] = useState([]);
-  const [followersLoading, setFollowersLoading] = useState(false);
-  const [followingLoading, setFollowingLoading] = useState(false);
-  const [removeLoading, setRemoveLoading] = useState({});
-  const [unfollowLoading, setUnfollowLoading] = useState({});
+  const [activeTab, setActiveTab] = useState('posts');
+
 
   useEffect(() => {
     const fetchUser = async() => {
       const token = Cookies.get('token');
-      const currentUserIdFromCookie = Cookies.get('userid');
+      const currentUserIdFromCookie = Cookies.get('userid')?.replace(/^"|"$/g,'');
       setCurrentUserId(currentUserIdFromCookie);
       
       // Check if viewing own profile
@@ -47,16 +42,12 @@ const ShowProfile = () => {
         setFollowing(res.data.FollowingCount);
         setFollowers(res.data.FollowersCount);
         setIsFollowing(res.data.isFollowing);
-        // Handle different image structures
         if (res.data.image?.userImage) {
           setImage(res.data.image.userImage);
-        } else if (res.data.image?.imageUrl) {
-          setImage(res.data.image.imageUrl);
-        } else if (res.data.image?.data) {
-          setImage(`data:${res.data.image.contentType};base64,${res.data.image.data.toString('base64')}`);
-        } else {
+        }else{
           setImage('');
         }
+        
       } catch(error) {
         console.error(error);
         setIsFollowing(false);
@@ -68,14 +59,6 @@ const ShowProfile = () => {
     fetchUser();
   }, [userId]);
 
-  // Fetch followers/following when tabs are selected
-  useEffect(() => {
-    if (activeTab === 'followers' && isCurrentUser) {
-      fetchFollowers();
-    } else if (activeTab === 'following' && isCurrentUser) {
-      fetchFollowing();
-    }
-  }, [activeTab, isCurrentUser, userId]);
 
   const handleFollowToggle = async() => {
     const token = Cookies.get('token');
@@ -122,85 +105,10 @@ const ShowProfile = () => {
     }
   };
 
-  // Handle unfollow functionality (for when viewing someone else's profile)
-  const handleUnfollow = async() => {
-    const token = Cookies.get('token');
-    try {
-      const res = await api.post(`/unfollow/${userId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      
-      if (res.status === 200) {
-        setIsFollowing(false);
-        // Update followers count
-        if (res.data.followersCount !== undefined) {
-          setFollowers(res.data.followersCount);
-        } else {
-          setFollowers(prev => Number(prev) - 1);
-        }
-      }
-    } catch (error) {
-      console.error('Error unfollowing user:', error);
-    }
-  };
 
-  // Handle remove follower functionality (for when viewing own profile)
-  const handleRemoveFollower = async(followerUserId) => {
-    const token = Cookies.get('token');
-    try {
-      setRemoveLoading(prev => ({ ...prev, [followerUserId]: true }));
-      const res = await api.post(`/remove-follower/${followerUserId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      
-      if (res.status === 200) {
-        // Update followers count and remove from list
-        if (res.data.followersCount !== undefined) {
-          setFollowers(res.data.followersCount);
-        } else {
-          setFollowers(prev => Number(prev) - 1);
-        }
-        setFollowersList(prev => prev.filter(user => user.userId !== followerUserId));
-      }
-    } catch (error) {
-      console.error('Error removing follower:', error);
-    } finally {
-      setRemoveLoading(prev => ({ ...prev, [followerUserId]: false }));
-    }
-  };
-
-  // Handle unfollow functionality for following list
-  const handleUnfollowFromList = async(userToUnfollow) => {
-    const token = Cookies.get('token');
-    try {
-      setUnfollowLoading(prev => ({ ...prev, [userToUnfollow.userId]: true }));
-      const res = await api.post(`/unfollow/${userToUnfollow.userId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      
-      if (res.status === 200) {
-        // Remove from following list
-        setFollowingList(prev => prev.filter(user => user.userId !== userToUnfollow.userId));
-        // Update following count
-        setFollowing(prev => Number(prev) - 1);
-      }
-    } catch (error) {
-      console.error('Error unfollowing user:', error);
-    } finally {
-      setUnfollowLoading(prev => ({ ...prev, [userToUnfollow.userId]: false }));
-    }
-  };
 
   // Fetch followers list
   const fetchFollowers = async () => {
-    if (!isCurrentUser) return;
-    
     setFollowersLoading(true);
     try {
       const token = Cookies.get('token');
@@ -227,8 +135,6 @@ const ShowProfile = () => {
 
   // Fetch following list
   const fetchFollowing = async () => {
-    if (!isCurrentUser) return;
-    
     setFollowingLoading(true);
     try {
       const token = Cookies.get('token');
@@ -250,6 +156,35 @@ const ShowProfile = () => {
       setFollowingList([]);
     } finally {
       setFollowingLoading(false);
+    }
+  };
+
+  // Handle follow user from list
+  const handleFollowUser = async (userToFollow) => {
+    const token = Cookies.get('token');
+    try {
+      setFollowLoading(prev => ({ ...prev, [userToFollow.userId]: true }));
+      const res = await api.post(`/follow/${userToFollow.userId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      if (res.status === 200) {
+        // Update the user's isFollowing status in the list
+        const updateList = list => list.map(user => 
+          user.userId === userToFollow.userId 
+            ? { ...user, isFollowing: true }
+            : user
+        );
+        
+        setFollowersList(updateList);
+        setFollowingList(updateList);
+      }
+    } catch (error) {
+      console.error('Error following user:', error);
+    } finally {
+      setFollowLoading(prev => ({ ...prev, [userToFollow.userId]: false }));
     }
   };
 
@@ -384,10 +319,6 @@ const ShowProfile = () => {
               { id: 'posts', label: 'Posts', icon: '📝' },
               { id: 'media', label: 'Media', icon: '📷' },
               { id: 'likes', label: 'Likes', icon: '❤️' },
-              ...(isCurrentUser ? [
-                { id: 'followers', label: 'Followers', icon: '👥' },
-                { id: 'following', label: 'Following', icon: '👤' }
-              ] : [])
             ].map(tab => (
               <button
                 key={tab.id}
@@ -455,7 +386,7 @@ const ShowProfile = () => {
           </div>
         )}
 
-        {activeTab === 'followers' && isCurrentUser && (
+        {activeTab === 'followers' && (
           <div className="space-y-3">
             {followersLoading ? (
               <div className="flex items-center justify-center py-12">
@@ -484,20 +415,24 @@ const ShowProfile = () => {
                       <p className="text-sm text-gray-500">{user.fullname}</p>
                     </div>
                   </Link>
-                  <button
-                    onClick={() => handleRemoveFollower(user.userId)}
-                    disabled={removeLoading[user.userId]}
-                    className="p-2.5 bg-gray-100 hover:bg-red-500 hover:text-white text-gray-600 rounded-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-red-300"
-                    title="Remove follower"
-                  >
-                    {removeLoading[user.userId] ? (
-                      <div className="h-5 w-5 border-2 border-t-transparent border-gray-600 rounded-full animate-spin"></div>
-                    ) : (
-                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    )}
-                  </button>
+                  {isCurrentUser && user.userId !== currentUserId && !user.isFollowing && (
+                    <button
+                      onClick={() => handleFollowUser(user)}
+                      disabled={followLoading[user.userId]}
+                      className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white text-sm font-medium rounded-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300 flex items-center gap-2 shadow-md"
+                    >
+                      {followLoading[user.userId] ? (
+                        <div className="h-4 w-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+                      ) : (
+                        <>
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                          <span>Follow</span>
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               ))
             ) : (
@@ -516,7 +451,7 @@ const ShowProfile = () => {
           </div>
         )}
 
-        {activeTab === 'following' && isCurrentUser && (
+        {activeTab === 'following' && (
           <div className="space-y-3">
             {followingLoading ? (
               <div className="flex items-center justify-center py-12">
@@ -545,22 +480,24 @@ const ShowProfile = () => {
                       <p className="text-sm text-gray-500">{user.fullname}</p>
                     </div>
                   </Link>
-                  <button
-                    onClick={() => handleUnfollowFromList(user)}
-                    disabled={unfollowLoading[user.userId]}
-                    className="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white text-sm font-medium rounded-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-300 flex items-center gap-2 shadow-md"
-                  >
-                    {unfollowLoading[user.userId] ? (
-                      <div className="h-4 w-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
-                    ) : (
-                      <>
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6" />
-                        </svg>
-                        <span>Unfollow</span>
-                      </>
-                    )}
-                  </button>
+                  {isCurrentUser && user.userId !== currentUserId && !user.isFollowing && (
+                    <button
+                      onClick={() => handleFollowUser(user)}
+                      disabled={followLoading[user.userId]}
+                      className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white text-sm font-medium rounded-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300 flex items-center gap-2 shadow-md"
+                    >
+                      {followLoading[user.userId] ? (
+                        <div className="h-4 w-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+                      ) : (
+                        <>
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                          <span>Follow</span>
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               ))
             ) : (

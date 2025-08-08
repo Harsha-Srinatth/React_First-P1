@@ -22,16 +22,15 @@ const navigate = useNavigate();
         userDetails,
         {
           headers: {
-            "Content-Type": "application/json" // <-- fixed typo
+            "Content-Type": "application/json"
           }
         }
       );
-      console.log(response.data.user);
       setEmail("")
       setPassword("")
-      Cookies.set('token', response.data.token, { expires: 1 }); // expires in 1 day
+      Cookies.set('token', response.data.token, { expires: 1 }); 
       Cookies.set('user', JSON.stringify(response.data.user), { expires: 1 });
-      Cookies.set('userid', response.data.user.userid, { expires: 1 });
+      Cookies.set('userid',JSON.stringify(response.data.user.userId), { expires: 1 });
       navigate('/');
     } catch (error) {
       if (error.response) {
@@ -50,8 +49,8 @@ const navigate = useNavigate();
   };
   return(
   <>
-    <div className='min-h-screen  flex  justify-center items-center bg-gradient-to-r from-cyan-500 to-blue-600 '>
-      <div className ="shadow-md w-full max-w-md rounded-xl bg-white p-7" >
+    <div className='min-h-screen  flex  justify-center items-center p-2 bg-gradient-to-r from-cyan-500 to-blue-600 '>
+      <div className ="shadow-md w-full max-w-md rounded-xl bg-white p-6" >
         <h1 className='text-2xl font-bold text-center text-black'><i className="fa-solid fa-user px-1"></i>Login</h1>
         <form onSubmit ={handleSubmit} action ="/login" className='mt-6'>
           <div className='mx-4 items-center '>

@@ -2,6 +2,7 @@ import React from 'react';
 import api from '../services/api';
 import { useState, useEffect } from 'react';
 import Likes from './Likes';
+import { Link } from 'react-router-dom'
 import Comments from './Comments';
 import { MessageCircle, Trash2, X } from 'lucide-react'; // Added Trash2 and X icons
 import Cookies from 'js-cookie';  
@@ -10,18 +11,17 @@ const YourPosts = () => {
   const [userposts, setUserposts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeComments, setActiveComments] = useState(null); // Added missing state
-  const token = Cookies.get('token');
-  
+  const userid = Cookies.get('userid')?.replace(/^"|"$/g, '');
   useEffect(() => {
     const fetchUserPosts = async() => {
       try {
+        const token = Cookies.get('token');
         const res = await api.get('/user/posts/user_posts', {
           headers: {
             Authorization: `Bearer ${token}`
           },
         });
         setUserposts(res.data);
-        console.log("Fetched user posts", res.data);
       } catch(error) {
         console.error(error);
       } finally {
@@ -47,8 +47,6 @@ const YourPosts = () => {
           Authorization: `Bearer ${token}`
         }
       });
-      
-      console.log("Post deleted successfully:", postId);
     } catch(error) {
       console.error("Error deleting post:", error);
       // If deletion fails, revert the UI change by fetching posts again
@@ -67,14 +65,14 @@ const YourPosts = () => {
 
   if(loading) {
     return (
-      <div className="flex items-center justify-center h-full w-full p-4">
+      <div className="flex items-center justify-center h-full w-full p-4 pt-20">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
       </div>
     );
   }
   
   return (
-    <div className="flex flex-col flex-1 p-4 max-w-xl mx-auto w-full bg-gray-900 min-h-screen">
+    <div className="flex flex-col flex-1 p-4 max-w-xl mx-auto w-full bg-gray-900 min-h-screen pt-20 pb-24">
       <h2 className="text-2xl font-bold text-white mb-6 text-center">Your Posts</h2>
       
       {userposts.length > 0 ? (
@@ -182,6 +180,7 @@ const YourPosts = () => {
                       Count={post.comments?.length || 0}
                       comment={post.comments}
                       userId={post.userid}
+                      userid={userid}
                       onClose={() => setActiveComments(null)}
                     />
                   </div>
@@ -193,10 +192,10 @@ const YourPosts = () => {
       ) : (
         <div className="bg-black bg-opacity-80 rounded-lg border border-gray-800 p-8 text-center text-white my-8 shadow-lg transform transition-transform hover:scale-105 duration-300">
           <p className="text-xl font-semibold">No posts available</p>
-          <p className="text-gray-400 mt-2">Create Your First Post</p>
-          <button className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-full text-white font-medium transition-colors duration-300">
+          <p className="text-gray-400 mt-2 mb-8">Create Your First Post</p>
+          <Link to="/create-post" className=" px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-full text-white font-medium transition-colors duration-300">
             Create Post
-          </button>
+          </Link>
         </div>
       )}
     </div>

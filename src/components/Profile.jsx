@@ -137,8 +137,6 @@ const Profile = () => {
     );
   }
 
-  console.log('Profile details object:', details);
-
   return (
     <div className="w-full bg-gray-900 text-gray-100 overflow-y-auto pb-16 md:pb-0 min-h-screen">
       {/* Cover photo with gradient overlay */}
@@ -257,33 +255,32 @@ const Profile = () => {
             </div>
           </div>
           
-          {/* Stats - Minimal modern look */}
-          <div className="flex justify-center gap-10 mt-6 select-none">
-            <div className="flex flex-col items-center">
-              <span className="font-bold text-xl md:text-2xl text-gray-100 tracking-tight">0</span>
-              <span className="text-xs md:text-sm text-gray-400 mt-1 uppercase tracking-wider">Posts</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="font-bold text-xl md:text-2xl text-gray-100 tracking-tight">{followers}</span>
-              <Link to={`/list-followers/${details.userid}`} className="text-xs md:text-sm text-gray-300 hover:font-bold font-semibold mt-1 transition-colors uppercase tracking-wider focus:outline-none">
-                Followers
+          {/* Stats - Classic look */}
+          <div className="flex items-center space-x-8 mt-4 text-gray-300 border-t border-b border-gray-700 py-4 px-3">
+            <div className="flex items-center space-x-2">
+              <Link to={`/list-followers/${details.userid}`} className="text-lg hover:text-blue-400 transition-colors">
+                Followers :
               </Link>
+              <span className="text-lg font-medium">{followers}</span>
             </div>
-            <div className="flex flex-col items-center">
-              <span className="font-bold text-xl md:text-2xl text-gray-100 tracking-tight">{following}</span>
-              <Link to={`/list-following/${details.userid}`} className="text-xs md:text-sm text-gray-300 hover:font-bold font-semibold mt-1 transition-colors uppercase tracking-wider focus:outline-none">
-                Following
+            <div className="w-1.5 h-1.5 bg-gray-600 rounded-full"></div>
+            <div className="flex items-center space-x-2">
+              <Link to={`/list-following/${details.userid}`} className="text-lg hover:text-blue-400 transition-colors">
+                Following :
               </Link>
+              <span className="text-lg font-medium">{following}</span>
+            </div>
+            <div className="w-1.5 h-1.5 bg-gray-600 rounded-full"></div>
+            <div className="flex items-center space-x-2">
+              <span className="text-lg">Posts :</span>
+              <span className="text-lg font-medium">0</span>
             </div>
           </div>
 
           {/* Bio (remains below stats) */}
           {details.bio ? (
-            <div className="mt-6 text-gray-100 bg-gradient-to-r from-blue-800 via-purple-800 to-blue-900 rounded-xl p-5 border border-blue-700 shadow-lg flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-300 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              <p className="text-base md:text-lg font-medium whitespace-pre-line">{details.bio}</p>
+            <div className="mt-6 text-gray-100 bg-gray-800 rounded-lg p-5 border border-gray-700">
+              <p className="text-base text-gray-300 leading-relaxed whitespace-pre-line">{details.bio}</p>
             </div>
           ) : (
             <div className="mt-6 flex items-center justify-center">
