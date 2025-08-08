@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
 const api = axios.create({
-    baseURL: 'my-backend-gules.vercel.app',
+    baseURL: 'https://my-backend-gules.vercel.app',
 });
 
 
