@@ -48,7 +48,7 @@ const Posts = () => {
   }
 
   return (
-    <div className="flex flex-col flex-1 p-2 max-w-xl mx-auto w-full">
+    <div className="flex flex-col flex-1 p-2 max-w-xl mx-auto w-full pt-20 pb-24">
       {posts.length > 0 ? (
         posts.map((post) => (
           <div key={post.postId} className="mb-6 relative">
@@ -150,7 +150,7 @@ const Posts = () => {
           </div>
         ))
       ) : (
-        <div className="bg-black bg-opacity-80 rounded-lg border border-gray-800 p-8 text-center text-white">
+        <div className="bg-black bg-opacity-80 rounded-lg border border-gray-800 p-8 mt- text-center text-white">
           <p className="text-xl">No posts available</p>
           <p className="text-gray-400 mt-2">Check back later for new content</p>
         </div>

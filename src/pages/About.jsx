@@ -44,7 +44,7 @@ const projects = [
 
 const About = () => {
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-black via-zinc-900 to-blue-950 flex flex-col items-center justify-start py-8 px-4 lg:px-8 overflow-y-auto pb-24 md:pb-8">
+    <div className="w-full min-h-screen bg-gradient-to-br from-black via-zinc-900 to-blue-950 flex flex-col items-center justify-start py-8 px-4 lg:px-8 overflow-y-auto pt-20 pb-24 md:pb-8">
       <div className="w-full max-w-7xl mx-auto flex flex-col items-center">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 mb-6 drop-shadow-lg transition-all duration-500 text-center">
           About This Project

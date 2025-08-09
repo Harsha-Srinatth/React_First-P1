@@ -190,7 +190,7 @@ const YourPosts = () => {
           </div>
         ))
       ) : (
-        <div className="bg-black bg-opacity-80 rounded-lg border border-gray-800 p-8 text-center text-white my-8 shadow-lg transform transition-transform hover:scale-105 duration-300">
+        <div className="bg-black bg-opacity-80 rounded-lg border border-gray-800 p-8 pt-20 text-center text-white my-8 shadow-lg transform transition-transform hover:scale-105 duration-300">
           <p className="text-xl font-semibold">No posts available</p>
           <p className="text-gray-400 mt-2 mb-8">Create Your First Post</p>
           <Link to="/create-post" className=" px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-full text-white font-medium transition-colors duration-300">
