@@ -81,7 +81,7 @@ const Create = () => {
           width={36}
           height={36}
           alt="create" />
-        <h2 className="text-center text-xl md:text-3xl font-bold tracking-wide">Create Post</h2>
+        <h2 className="text-center text-xl md:text-3xl font-bold tracking-wide">Share Anything To Your Friends</h2>
       </div>
       
       {formSuccess && (
