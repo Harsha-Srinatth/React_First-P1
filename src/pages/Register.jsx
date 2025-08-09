@@ -16,76 +16,59 @@ const navigate = useNavigate();
  
   
   const handleSubmit = async (e) => {
-     e.preventDefault();
+    e.preventDefault();
 
-  // Validation
-  const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
-  if (!specialCharRegex.test(username)) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Invalid Username',
-      text: 'Username must contain at least one special character.'
-    });
-    return;
-  }
-  if (password.length < 6) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Invalid Password',
-      text: 'Password must be at least 6 characters long.'
-    });
-    return;
-  }
-  if (!fullname || fullname[0] !== fullname[0].toUpperCase()) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Invalid Fullname',
-      text: 'Fullname must start with an uppercase letter.'
-    });
-    return;
-  }
+    // Trimmed values
+    const tFullname = (fullname || '').trim();
+    const tUsername = (username || '').trim();
+    const tUserid = (userid || '').trim();
+    const tEmail = (email || '').trim();
 
-  // Transform values
-  const transformedFullname = fullname[0].toUpperCase() + fullname.slice(1);
-  const transformedUserid = userid.toUpperCase();
-
-  try {
-    const response = await api.post('/register', {
-      fullname: transformedFullname,
-      username,
-      userid: transformedUserid,
-      email,
-      password,
-    });
-    // handle success, e.g. show a message or redirect
-    setFullname("")
-    setUsername("")
-    setUserid("")
-    setEmail("")
-    setPassword("")
-    Swal.fire({
-      icon: 'success',
-      title: 'Registered successfully',
-      showConfirmButton: false,
-      timer: 1500
-    });
-    navigate('/login')
-  } catch (error) {
-    if (error.response) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Registration failed',
-        text: error.response.data.message || 'Registration failed'
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'An error occurred',
-        text: error.message
-      });
+    // Basic required validation aligned with backend
+    if (!tFullname || !tUsername || !tUserid || !tEmail || !password) {
+      Swal.fire({ icon: 'error', title: 'Missing details', text: 'All fields are required.' });
+      return;
     }
-  }
-};
+
+    // Simple email check
+    const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
+    if (!emailRegex.test(tEmail)) {
+      Swal.fire({ icon: 'error', title: 'Invalid Email', text: 'Please enter a valid email address.' });
+      return;
+    }
+
+    // Password length
+    if (password.length < 6) {
+      Swal.fire({ icon: 'error', title: 'Weak Password', text: 'Password must be at least 6 characters long.' });
+      return;
+    }
+
+    // Transform values (optional UX)
+    const transformedFullname = tFullname ? tFullname[0].toUpperCase() + tFullname.slice(1) : tFullname;
+    const transformedUserid = tUserid.toUpperCase();
+
+    try {
+      const response = await api.post('/register', {
+        fullname: transformedFullname,
+        username: tUsername,
+        userid: transformedUserid,
+        email: tEmail,
+        password,
+      });
+
+      setFullname('');
+      setUsername('');
+      setUserid('');
+      setEmail('');
+      setPassword('');
+
+      Swal.fire({ icon: 'success', title: 'Registered successfully', showConfirmButton: false, timer: 1500 });
+      navigate('/login');
+    } catch (error) {
+      const message = error?.response?.data?.message || error?.message || 'Registration failed';
+      Swal.fire({ icon: 'error', title: 'Registration failed', text: message });
+    }
+  };
 const navigateTo = () => {
   navigate('/login');
 }
