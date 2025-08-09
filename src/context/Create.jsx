@@ -74,7 +74,7 @@ const Create = () => {
 
   return (
     <div className='flex flex-col flex-1 p-2 md:p-4 gap-3 overflow-y-auto min-h-screen max-w-6xl mx-auto pb-24 pt-16 bg-gradient-to-b from-gray-900 via-gray-800 to-black'>
-      <div className='rounded-lg bg-gradient-to-r from-white/20 to-white/10 shadow-xl flex text-white w-full p-4 items-center justify-center gap-3 sticky top-16 z-10 border border-white/20 backdrop-blur-sm'>
+      <div className='rounded-lg bg-gradient-to-r  mt-0 from-white/20 to-white/10 shadow-xl flex text-white w-full p-4 items-center justify-center gap-3 sticky border border-white/20 backdrop-blur-sm'>
         <img
           src="../imges/image-solid.svg"
           className='invert'
