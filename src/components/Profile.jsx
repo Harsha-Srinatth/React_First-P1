@@ -144,7 +144,7 @@ const Profile = () => {
         {details.coverImage ? (
           <>
             <img 
-              src={ `https://backend-folder-hdib.onrender.com/uploads/${details.coverImage}` }
+              src={ details.coverImage }
               alt="Cover"
               className="w-full h-full object-cover opacity-60"
             />
@@ -165,7 +165,7 @@ const Profile = () => {
               <div className="rounded-full border-4 border-gray-800 shadow-lg h-28 w-28 md:h-36 md:w-36 overflow-hidden relative group">
               {image ? (
                   <img
-                    src={`https://backend-folder-hdib.onrender.com/uploads/${image}`}
+                    src={ image }
                     alt= "profile"
                     className="w-full h-full object-cover rounded-full transition-all duration-300"
                     onError={(e) => {

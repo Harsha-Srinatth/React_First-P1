@@ -110,7 +110,7 @@ const Header = ({ toggleSidebar }) => {
           <Link to='/user/profile' className="flex items-center cursor-pointer">
             {image ? (
               <img
-                src={`https://backend-folder-hdib.onrender.com/uploads/${image}`}
+                src={ image }
                 width={36}
                 height={36}
                 alt="User icon"

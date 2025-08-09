@@ -175,11 +175,11 @@ const AddProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4 md:p-6 lg:p-8 w-full">
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-3 md:p-4 lg:p-6 w-full">
       <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="flex flex-col md:flex-row">
           {/* Left side - Photo preview */}
-          <div className="w-full md:w-1/2 bg-gray-50 p-8 md:p-12 lg:p-16 flex items-center justify-center">
+          <div className="w-full md:w-1/2 bg-gray-50 p-8 md:p-10 lg:p-14 flex items-center justify-center">
             {/* Profile photo circle */}
             <div 
               className="relative cursor-pointer group"
@@ -200,7 +200,7 @@ const AddProfile = () => {
                   </div>
                 ) : previewUrl || userImage ? (
                   <img 
-                    src={previewUrl || `https://backend-folder-hdib.onrender.com/uploads/${userImage}`} 
+                    src={previewUrl || userImage } 
                     alt="Profile preview" 
                     className="w-full h-full object-cover"
                   />

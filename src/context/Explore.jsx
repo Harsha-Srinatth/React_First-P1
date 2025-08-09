@@ -107,7 +107,7 @@ const Users = () => {
                         <div className="relative">
                           {user.image?.imageUrl ? (
                             <img 
-                              src={`https://backend-folder-hdib.onrender.com/uploads/${user.image?.imageUrl || 'https://via.placeholder.com/56'}`} 
+                              src={ user.image?.imageUrl || 'https://via.placeholder.com/56' } 
                               className="rounded-full bg-slate-700 group-hover:ring-2 group-hover:ring-blue-400 transition-all shadow-inner border-0"
                               alt={user.fullname || user.username}
                               width={68} 
