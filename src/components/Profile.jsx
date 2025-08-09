@@ -138,7 +138,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="w-full bg-gray-900 text-gray-100 overflow-y-auto pt-20 md:pt-0 pb-24 md:pb-0 min-h-screen">
+    <div className="w-full bg-gray-900 text-gray-100 overflow-y-auto pt-20 md:pt-0 md:pb-0 min-h-screen">
       {/* Cover photo with gradient overlay */}
       <div className="h-32 sm:h-48 md:h-60 bg-gradient-to-r from-blue-900 to-purple-900 relative w-full overflow-hidden">
         {details.coverImage ? (
@@ -255,25 +255,27 @@ const Profile = () => {
             </div>
           </div>
           
-          {/* Stats - Classic look */}
-          <div className="flex items-center space-x-4 md:space-x-8 mt-4 text-gray-300 border-t border-b border-gray-700 py-3 md:py-4 px-3">
-            <div className="flex items-center space-x-2">
-              <Link to={`/list-followers/${details.userid}`} className="text-lg hover:text-blue-400 transition-colors">
-                Followers :
+          {/* Stats - compact on mobile, roomy on desktop */}
+          <div className="mt-4 border-t border-b border-gray-700 px-2">
+            <div className="grid grid-cols-3 divide-x divide-gray-700">
+              <Link
+                to={`/list-followers/${details.userid}`}
+                className="flex items-center justify-center gap-1 py-2 md:py-3 text-sm md:text-base text-gray-300 hover:text-blue-400 transition-colors"
+              >
+                <span>Followers</span>
+                <span className="font-semibold text-white">{followers}</span>
               </Link>
-              <span className="text-lg font-medium">{followers}</span>
-            </div>
-            <div className="w-1.5 h-1.5 bg-gray-600 rounded-full"></div>
-            <div className="flex items-center space-x-2">
-              <Link to={`/list-following/${details.userid}`} className="text-lg hover:text-blue-400 transition-colors">
-                Following :
+              <Link
+                to={`/list-following/${details.userid}`}
+                className="flex items-center justify-center gap-1 py-2 md:py-3 text-sm md:text-base text-gray-300 hover:text-blue-400 transition-colors"
+              >
+                <span>Following</span>
+                <span className="font-semibold text-white">{following}</span>
               </Link>
-              <span className="text-lg font-medium">{following}</span>
-            </div>
-            <div className="w-1.5 h-1.5 bg-gray-600 rounded-full"></div>
-            <div className="flex items-center space-x-2">
-              <span className="text-lg">Posts :</span>
-              <span className="text-lg font-medium">0</span>
+              <div className="flex items-center justify-center gap-1 py-2 md:py-3 text-sm md:text-base text-gray-300">
+                <span>Posts</span>
+                <span className="font-semibold text-white">0</span>
+              </div>
             </div>
           </div>
 
