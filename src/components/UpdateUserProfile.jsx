@@ -55,7 +55,7 @@ const UpdateUserProfile = () => {
           bio: userInfo.bio || ''
         };
         setUserDetails(populated);
-        setOriginalUserDetails(populated);
+        setOriginalUserDetails(profileImg);
         setPreviewUrl(profileImg);
       } catch (error) {
         console.error('Error fetching user image:', error);
