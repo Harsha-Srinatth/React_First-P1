@@ -138,7 +138,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="w-full bg-gray-900 text-gray-100 overflow-y-auto pt-20 pb-24 md:pb-0 min-h-screen">
+    <div className="w-full bg-gray-900 text-gray-100 overflow-y-auto pt-20 md:pt-0 pb-24 md:pb-0 min-h-screen">
       {/* Cover photo with gradient overlay */}
       <div className="h-32 sm:h-48 md:h-60 bg-gradient-to-r from-blue-900 to-purple-900 relative w-full overflow-hidden">
         {details.coverImage ? (

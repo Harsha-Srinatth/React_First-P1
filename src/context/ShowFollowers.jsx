@@ -80,7 +80,7 @@ const ShowFollowers = () => {
     }
 
     return (
-        <div className='text-white w-full min-h-screen bg-zinc-950 p-4 pt-20 pb-24'>
+        <div className='text-white w-full min-h-screen bg-zinc-950 p-4 pt-20 md:pt-0 pb-24 md:pb-0'>
             <div className='flex items-center justify-between mb-6'>
                 <div className='flex items-center gap-3'>
                     <button 

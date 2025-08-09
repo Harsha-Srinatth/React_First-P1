@@ -73,7 +73,7 @@ const YourPosts = () => {
   }
   
   return (
-    <div className="flex flex-col flex-1 p-4 max-w-xl mx-auto w-full bg-gray-900 min-h-screen pt-20 pb-24">
+    <div className="flex flex-col flex-1 p-4 max-w-xl mx-auto w-full bg-gray-900 min-h-screen pt-20 md:pt-0 pb-24 md:pb-0">
       <h2 className="text-2xl font-bold text-white mb-6 text-center">Your Posts</h2>
       
       {userposts.length > 0 ? (

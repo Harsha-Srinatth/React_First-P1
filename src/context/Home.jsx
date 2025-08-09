@@ -48,7 +48,7 @@ const Posts = () => {
   }
 
   return (
-    <div className="flex flex-col flex-1 p-2 max-w-xl mx-auto w-full pt-20 pb-24">
+    <div className="flex flex-col flex-1 p-2 max-w-xl mx-auto w-full pt-20 md:pt-0 pb-24 md:pb-0">
       {posts.length > 0 ? (
         posts.map((post) => (
           <div key={post.postId} className="mb-6 relative">
