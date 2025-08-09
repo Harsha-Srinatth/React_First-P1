@@ -138,9 +138,9 @@ const Profile = () => {
   }
 
   return (
-    <div className="w-full bg-gray-900 text-gray-100 overflow-y-auto pb-16 md:pb-0 min-h-screen">
+    <div className="w-full bg-gray-900 text-gray-100 overflow-y-auto pt-20 pb-24 md:pb-0 min-h-screen">
       {/* Cover photo with gradient overlay */}
-      <div className="h-40 sm:h-48 md:h-60 bg-gradient-to-r from-blue-900 to-purple-900 relative w-full overflow-hidden">
+      <div className="h-32 sm:h-48 md:h-60 bg-gradient-to-r from-blue-900 to-purple-900 relative w-full overflow-hidden">
         {details.coverImage ? (
           <>
             <img 
@@ -161,8 +161,8 @@ const Profile = () => {
           {/* Profile header */}
           <div className="flex flex-col sm:flex-row items-center sm:items-end">
             {/* Profile image */}
-            <div className="flex-shrink-0 -mt-16 sm:-mt-20 md:-mt-24 mb-4 sm:mb-0">
-              <div className="rounded-full border-4 border-gray-800 shadow-lg h-28 w-28 md:h-36 md:w-36 overflow-hidden relative group">
+            <div className="flex-shrink-0 -mt-14 sm:-mt-16 md:-mt-20 mb-4 sm:mb-0">
+              <div className="rounded-full border-4 border-gray-800 shadow-lg h-24 w-24 md:h-32 md:w-32 overflow-hidden relative group">
               {image ? (
                   <img
                     src={ image }
@@ -256,7 +256,7 @@ const Profile = () => {
           </div>
           
           {/* Stats - Classic look */}
-          <div className="flex items-center space-x-8 mt-4 text-gray-300 border-t border-b border-gray-700 py-4 px-3">
+          <div className="flex items-center space-x-4 md:space-x-8 mt-4 text-gray-300 border-t border-b border-gray-700 py-3 md:py-4 px-3">
             <div className="flex items-center space-x-2">
               <Link to={`/list-followers/${details.userid}`} className="text-lg hover:text-blue-400 transition-colors">
                 Followers :
