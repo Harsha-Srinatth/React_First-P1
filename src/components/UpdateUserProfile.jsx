@@ -254,7 +254,7 @@ const UpdateUserProfile = () => {
               onClick={handleProfileClick}
             >
               <div className={`w-32 h-32 rounded-full border-4 flex items-center justify-center overflow-hidden shadow-lg
-                ${previewUrl ? 'border-blue-500' : 'border-gray-300 border-dashed'}`}
+                ${previewUrl ? 'border-blue-500' : 'border-gray-300 border-black'}`}
               >
                 {previewUrl ? (
                   <img 
