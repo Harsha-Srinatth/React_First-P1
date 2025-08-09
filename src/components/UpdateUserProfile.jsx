@@ -55,7 +55,7 @@ const UpdateUserProfile = () => {
           bio: userInfo.bio || ''
         };
         setUserDetails(populated);
-        setOriginalUserDetails(profileImg);
+        setOriginalUserDetails(populated);
         setPreviewUrl(profileImg);
       } catch (error) {
         console.error('Error fetching user image:', error);
@@ -160,7 +160,13 @@ const UpdateUserProfile = () => {
     // Field validations similar to Register page (only validate fields that changed)
     const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
     if (trim(userDetails.username) !== trim(originalUserDetails.username)) {
-      if (trim(userDetails.username) && !specialCharRegex.test(userDetails.username)) {
+      if (!trim(userDetails.username)) {
+        const msg = 'Username is required.';
+        setError(msg);
+        Swal.fire({ icon: 'error', title: 'Invalid Username', text: msg });
+        return;
+      }
+      if (!specialCharRegex.test(userDetails.username)) {
         const msg = 'Username must contain at least one special character.';
         setError(msg);
         Swal.fire({ icon: 'error', title: 'Invalid Username', text: msg });
@@ -168,7 +174,13 @@ const UpdateUserProfile = () => {
       }
     }
     if (trim(userDetails.fullname) !== trim(originalUserDetails.fullname)) {
-      if (trim(userDetails.fullname) && userDetails.fullname[0] !== userDetails.fullname[0]?.toUpperCase()) {
+      if (!trim(userDetails.fullname)) {
+        const msg = 'Fullname is required.';
+        setError(msg);
+        Swal.fire({ icon: 'error', title: 'Invalid Fullname', text: msg });
+        return;
+      }
+      if (userDetails.fullname[0] !== userDetails.fullname[0]?.toUpperCase()) {
         const msg = 'Fullname must start with an uppercase letter.';
         setError(msg);
         Swal.fire({ icon: 'error', title: 'Invalid Fullname', text: msg });
@@ -188,10 +200,16 @@ const UpdateUserProfile = () => {
         formData.append("profilePhoto", compressedFile);
       }
       
-      // Only append fields that have values
-      if (userDetails.fullname) formData.append('fullname', userDetails.fullname);
-      if (userDetails.username) formData.append('username', userDetails.username);
-      if (userDetails.bio) formData.append('bio', userDetails.bio);
+      // Append only changed text fields
+      if (trim(userDetails.fullname) !== trim(originalUserDetails.fullname)) {
+        formData.append('fullname', userDetails.fullname);
+      }
+      if (trim(userDetails.username) !== trim(originalUserDetails.username)) {
+        formData.append('username', userDetails.username);
+      }
+      if (trim(userDetails.bio) !== trim(originalUserDetails.bio)) {
+        formData.append('bio', userDetails.bio);
+      }
       
       const token = Cookies.get('token');
       const response = await api.put('/Update/your/details', formData, {
