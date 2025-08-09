@@ -152,10 +152,10 @@ const AddProfile = () => {
           "Content-Type": "multipart/form-data"
         },
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Failed to upload image. Please try again.');
+
+      if (!response || response.status < 200 || response.status >= 300) {
+        const message = response?.data?.message || 'Failed to upload image. Please try again.';
+        throw new Error(message);
       }
 
       setUploadSuccess(true);
@@ -167,7 +167,8 @@ const AddProfile = () => {
       }
     } catch (error) {
       setUploadSuccess(false);
-      setError(error.message || 'An unexpected error occurred. Please try again.');
+      const message = error?.response?.data?.message || error?.message || 'An unexpected error occurred. Please try again.';
+      setError(message);
       console.error('Upload error:', error);
     } finally {
       setIsUploading(false);

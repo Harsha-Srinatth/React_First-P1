@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import api from '../services/api'
 import Cookies from 'js-cookie';
+import Swal from 'sweetalert2';
 
 const UpdateUserProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -12,6 +13,11 @@ const UpdateUserProfile = () => {
   const fileInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userDetails, setUserDetails] = useState({
+    username: '',
+    fullname: '',
+    bio: ''
+  });
+  const [originalUserDetails, setOriginalUserDetails] = useState({
     username: '',
     fullname: '',
     bio: ''
@@ -43,11 +49,13 @@ const UpdateUserProfile = () => {
         const profileImg = response.data?.image;
         const userInfo = response.data?._doc;
         
-        setUserDetails({
+        const populated = {
           username: userInfo.username || '',
           fullname: userInfo.fullname || '',
           bio: userInfo.bio || ''
-        });
+        };
+        setUserDetails(populated);
+        setOriginalUserDetails(populated);
         setPreviewUrl(profileImg);
       } catch (error) {
         console.error('Error fetching user image:', error);
@@ -133,15 +141,39 @@ const UpdateUserProfile = () => {
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     
-    // Check if any changes were made
-    const hasChanges = profile || 
-      userDetails.username !== '' || 
-      userDetails.fullname !== '' || 
-      userDetails.bio !== '';
+    // Check if any changes were made (image OR any text field differs from original)
+    const trim = (v) => (v ?? '').trim();
+    const hasTextChange =
+      trim(userDetails.username) !== trim(originalUserDetails.username) ||
+      trim(userDetails.fullname) !== trim(originalUserDetails.fullname) ||
+      trim(userDetails.bio) !== trim(originalUserDetails.bio);
+
+    const hasChanges = Boolean(profile) || hasTextChange;
     
     if (!hasChanges) {
-      setError('No changes detected. Please update at least one field.');
+      const msg = 'No changes detected. Please update at least one field.';
+      setError(msg);
+      Swal.fire({ icon: 'info', title: 'Nothing to update', text: msg });
       return;
+    }
+
+    // Field validations similar to Register page (only validate fields that changed)
+    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+    if (trim(userDetails.username) !== trim(originalUserDetails.username)) {
+      if (trim(userDetails.username) && !specialCharRegex.test(userDetails.username)) {
+        const msg = 'Username must contain at least one special character.';
+        setError(msg);
+        Swal.fire({ icon: 'error', title: 'Invalid Username', text: msg });
+        return;
+      }
+    }
+    if (trim(userDetails.fullname) !== trim(originalUserDetails.fullname)) {
+      if (trim(userDetails.fullname) && userDetails.fullname[0] !== userDetails.fullname[0]?.toUpperCase()) {
+        const msg = 'Fullname must start with an uppercase letter.';
+        setError(msg);
+        Swal.fire({ icon: 'error', title: 'Invalid Fullname', text: msg });
+        return;
+      }
     }
 
     try {
@@ -169,16 +201,24 @@ const UpdateUserProfile = () => {
         },
       });
 
-      if (response.status !== 200) {
-        throw new Error('Failed to update profile');
+      if (!response || response.status < 200 || response.status >= 300) {
+        const message = response?.data?.message || 'Failed to update profile';
+        throw new Error(message);
       }
       
       setUploadSuccess(true);
       setError('');
-      alert('Profile updated successfully!');
+      setOriginalUserDetails({
+        username: trim(userDetails.username),
+        fullname: trim(userDetails.fullname),
+        bio: trim(userDetails.bio)
+      });
+      Swal.fire({ icon: 'success', title: 'Updated successfully', showConfirmButton: false, timer: 1500 });
     } catch (error) {
       console.error(error);
-      setError('Failed to update profile. Please try again.');
+      const message = error?.response?.data?.message || error?.message || 'Failed to update profile. Please try again.';
+      setError(message);
+      Swal.fire({ icon: 'error', title: 'Update failed', text: message });
     } finally {
       setIsUploading(false);
     }

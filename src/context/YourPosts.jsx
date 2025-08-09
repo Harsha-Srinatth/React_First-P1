@@ -85,7 +85,7 @@ const YourPosts = () => {
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                 <div className="flex items-center">
                   <Avatar
-                    imageUrl={post.user?.imageUrl ? `https://backend-folder-hdib.onrender.com/uploads/${post.user.imageUrl}` : ''}
+                    imageUrl={post.user?.imageUrl}
                     name={post.userId?.username || post.username}
                     className="w-10 h-10"
                     alt="Profile"
@@ -122,7 +122,7 @@ const YourPosts = () => {
               )}
               
               {/* Post Image */}
-             <DynamicAspectImage src={`https://backend-folder-hdib.onrender.com/uploads/${post.imageUrl}`} alt="Post" />
+             <DynamicAspectImage src={post.imageUrl} alt="Post" />
              
               
               {/* Tags */}
