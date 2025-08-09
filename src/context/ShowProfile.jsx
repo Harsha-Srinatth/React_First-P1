@@ -241,7 +241,7 @@ const ShowProfile = () => {
               <div className="w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 relative">
                 {image ? (
                   <img
-                    src={image}
+                    src= {`https://backend-folder-hdib.onrender.com/uploads/${image}`}
                     alt="profile"
                     className="w-full h-full object-cover rounded-full border-4 border-white shadow-xl transition-all duration-300 hover:scale-105"
                     onError={(e) => {

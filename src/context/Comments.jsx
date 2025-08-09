@@ -109,7 +109,7 @@ const Comments = ({ postId, Count, comment, userId, userid, onClose }) => {
                     <div className="w-8 h-8 rounded-full mr-3 flex-shrink-0 overflow-hidden">
                       {comment.userimage ? (
                         <img 
-                          src={comment.userimage} 
+                          src={`https://backend-folder-hdib.onrender.com/uploads/${comment.userimage}`} 
                           alt={comment.username || "User"} 
                           className="w-full h-full object-cover"
                           onError={(e) => {

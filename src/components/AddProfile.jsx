@@ -200,7 +200,7 @@ const AddProfile = () => {
                   </div>
                 ) : previewUrl || userImage ? (
                   <img 
-                    src={previewUrl || userImage} 
+                    src={previewUrl || `https://backend-folder-hdib.onrender.com/uploads/${userImage}`} 
                     alt="Profile preview" 
                     className="w-full h-full object-cover"
                   />

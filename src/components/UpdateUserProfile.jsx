@@ -218,7 +218,7 @@ const UpdateUserProfile = () => {
               >
                 {previewUrl ? (
                   <img 
-                    src={previewUrl} 
+                    src= {`https://backend-folder-hdib.onrender.com/uploads/${previewUrl}`}
                     alt="Profile preview" 
                     className="w-full h-full object-cover"
                   />

@@ -134,7 +134,7 @@ const Sidebar = () => {
               <div className="relative">
                 {image ? (
                   <img
-                    src={image}
+                    src={ `https://backend-folder-hdib.onrender.com/uploads/${image}`}
                     alt={fullname[0]}
                     className="rounded-full w-10 h-10 border-2 border-transparent group-hover:border-blue-400 object-cover transition-all duration-300"
                     onError={(e) => {

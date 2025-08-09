@@ -50,7 +50,7 @@ const Posts = () => {
     <div className="flex flex-col flex-1 p-2 max-w-xl mx-auto w-full">
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post._id} className="mb-6 relative">
+          <div key={post.postId} className="mb-6 relative">
             {/* Main Post Card */}
             <div className="bg-black shadow-lg rounded-lg overflow-hidden border border-gray-800">
               {/* User Info */}
@@ -58,7 +58,7 @@ const Posts = () => {
                 {post.user.imageUrl && (
                   <img
                     className="w-10 h-10 rounded-full object-cover cursor-pointer border border-gray-700"
-                    src={post.user.imageUrl}
+                    src={`https://backend-folder-hdib.onrender.com/uploads/${post.user.imageUrl}`}
                     onClick= {() => goToProfile(post.userid)}
                     alt="Profile"
                   />
@@ -86,7 +86,7 @@ const Posts = () => {
 
               {/* Post Image */}
               {post.imageUrl && (
-                <DynamicAspectImage src={post.imageUrl} alt="Post" />
+                <DynamicAspectImage src={`https://backend-folder-hdib.onrender.com/uploads/${post.imageUrl}`} alt="Post" />
               )}
 
               {/* Tags */}

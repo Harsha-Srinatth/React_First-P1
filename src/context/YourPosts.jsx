@@ -77,7 +77,7 @@ const YourPosts = () => {
       
       {userposts.length > 0 ? (
         userposts.map((post) => (
-          <div key={post._id} className="mb-8 relative">
+          <div key={post.postId} className="mb-8 relative">
             {/* Main Post Card */}
             <div className="bg-black shadow-xl rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-all duration-300">
               {/* User Info and Delete Button */}
@@ -86,7 +86,7 @@ const YourPosts = () => {
                   {post.user?.imageUrl && (
                     <img
                       className="w-10 h-10 rounded-full object-cover border border-gray-700"
-                      src={post.user.imageUrl}
+                      src={`https://backend-folder-hdib.onrender.com/uploads/${post.user.imageUrl}`}
                       alt="Profile"
                     />
                   )}
@@ -122,7 +122,7 @@ const YourPosts = () => {
               )}
               
               {/* Post Image */}
-             <DynamicAspectImage src={post.imageUrl} alt="Post" />
+             <DynamicAspectImage src={`https://backend-folder-hdib.onrender.com/uploads/${post.imageUrl}`} alt="Post" />
              
               
               {/* Tags */}

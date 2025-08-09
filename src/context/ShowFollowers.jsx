@@ -122,7 +122,7 @@ const ShowFollowers = () => {
                                 <Link to={`/profile/${user.userId}`} className='flex items-center gap-4 flex-1'>
                                     {user.image ? (
                                         <img 
-                                            src={user.image} 
+                                            src={`https://backend-folder-hdib.onrender.com/uploads/${user.image}`} 
                                             className='w-12 h-12 rounded-full object-cover border-2 border-gray-600' 
                                             alt={user.fullname || 'profile'} 
                                         />
