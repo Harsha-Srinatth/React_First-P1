@@ -7,6 +7,7 @@ import Comments from './Comments';
 import { MessageCircle, Trash2, X } from 'lucide-react'; // Added Trash2 and X icons
 import Cookies from 'js-cookie';  
 import DynamicAspectImage from '../components/DynamicAspectImage';
+import Avatar from '../components/Avatar';
 const YourPosts = () => {
   const [userposts, setUserposts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,13 +84,12 @@ const YourPosts = () => {
               {/* User Info and Delete Button */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                 <div className="flex items-center">
-                  {post.user?.imageUrl && (
-                    <img
-                      className="w-10 h-10 rounded-full object-cover border border-gray-700"
-                      src={`https://backend-folder-hdib.onrender.com/uploads/${post.user.imageUrl}`}
-                      alt="Profile"
-                    />
-                  )}
+                  <Avatar
+                    imageUrl={post.user?.imageUrl ? `https://backend-folder-hdib.onrender.com/uploads/${post.user.imageUrl}` : ''}
+                    name={post.userId?.username || post.username}
+                    className="w-10 h-10"
+                    alt="Profile"
+                  />
                   <div className="ml-3">
                     <p className="text-white font-semibold">{post.userId?.username || "User"}</p>
                     <p className="text-gray-400 text-xs flex items-center">

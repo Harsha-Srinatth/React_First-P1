@@ -5,6 +5,7 @@ import { MessageCircle } from 'lucide-react';
 import Likes from './Likes';
 import Comments from './Comments';
 import DynamicAspectImage from '../components/DynamicAspectImage';
+import Avatar from '../components/Avatar';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'
 
@@ -55,14 +56,13 @@ const Posts = () => {
             <div className="bg-black shadow-lg rounded-lg overflow-hidden border border-gray-800">
               {/* User Info */}
               <div className="flex items-center px-4 py-3">
-                {post.user.imageUrl && (
-                  <img
-                    className="w-10 h-10 rounded-full object-cover cursor-pointer border border-gray-700"
-                    src={`https://backend-folder-hdib.onrender.com/uploads/${post.user.imageUrl}`}
-                    onClick= {() => goToProfile(post.userid)}
-                    alt="Profile"
-                  />
-                )}
+                <Avatar
+                  imageUrl={post.user?.imageUrl}
+                  name={post.username}
+                  className="w-10 h-10 cursor-pointer"
+                  onClick={() => goToProfile(post.userid)}
+                  alt="Profile"
+                />
                 <div className="ml-3">
                   <p className="text-white font-semibold cursor-pointer"  onClick= {() => goToProfile(post.userid)}>{post.username}</p>
                   <p className="text-gray-500 text-xs flex items-center">
@@ -86,7 +86,7 @@ const Posts = () => {
 
               {/* Post Image */}
               {post.imageUrl && (
-                <DynamicAspectImage src={`https://backend-folder-hdib.onrender.com/uploads/${post.imageUrl}`} alt="Post" />
+                <DynamicAspectImage src={post.imageUrl} alt="Post" />
               )}
 
               {/* Tags */}
